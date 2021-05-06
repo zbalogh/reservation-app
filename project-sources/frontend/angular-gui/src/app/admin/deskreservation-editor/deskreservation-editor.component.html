@@ -1,0 +1,69 @@
+<div align="center">
+
+    <div *ngIf="submitted">
+        <h1 class="display-5">Adatok mentése megtörtént!</h1>
+        <br>
+        <h3 class="display-6">Kiválasztott asztal: #{{desknumber}}</h3>
+        <br>
+		<a class="btn btn-primary" routerLink="/admin/settings" routerLinkActive="active" role="button">Vissza a foglalások listájához</a>
+        <br><br>
+    </div>
+
+
+    <div *ngIf="!submitted && deskReservation && deskReservation.id > 0">
+
+        <div class="jumbotron">
+            <h1 class="display-5">Foglalás szerkesztése</h1>
+			<p class="lead">Itt módosíthatod a kiválasztott asztalfoglalás adatait.</p>
+            <h3 class="display-6">Kiválasztott asztal: #{{desknumber}}</h3>
+            <br>
+            <a class="btn btn-primary" routerLink="/admin/settings" routerLinkActive="active" role="button">Vissza a foglalások listájához</a>
+        </div>
+
+        <div class="col-sm-12">
+        <form (ngSubmit)="onSubmit(reservationForm)" #reservationForm="ngForm">
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+            <label for="inputLastName">Vezetéknév</label>
+            <input type="text" class="form-control" id="inputLastName" name="inputLastName"
+                placeholder="Vezetéknév"
+                required
+                [(ngModel)]="deskReservation.lastname">
+            </div>
+            
+            <div class="form-group col-md-6">
+            <label for="inputFirstName">Keresztnév</label>
+            <input type="text" class="form-control" id="inputFirstName" name="inputFirstName"
+                placeholder="Keresztnév"
+                required
+                [(ngModel)]="deskReservation.firstname">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input type="email" class="form-control" id="inputEmail"name="inputEmail"
+                placeholder="Email"
+                required
+                [(ngModel)]="deskReservation.email">
+            </div>
+            
+            <div class="form-group col-md-6">
+            <label for="inputTelephoneNumber">Telefonszám</label>
+            <input type="text" class="form-control" id="inputTelephoneNumber" name="inputTelephoneNumber"
+                placeholder="Telefonszám"
+                required
+                [(ngModel)]="deskReservation.telephone">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!reservationForm.form.valid">Mentés</button>
+        </form>
+        <br>
+        </div>
+
+    </div>
+
+</div>

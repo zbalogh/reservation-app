@@ -1,0 +1,65 @@
+
+<div align="center">
+    <div align="center" class="jumbotron">
+
+        <h1 class="display-5">Asztalfoglalások megjelenítése</h1>
+
+        <div class="lead">
+            
+            <div class="text-justify">
+            Miután megtörtént az online foglalás, az asztalt foglaló személy köteles az asztal bérleti díját 10 napon belül kifizetni.
+            <br><br>
+            Végső fizetési határidő: <b>2020. február 15.</b>
+            <br><br>
+            Aki nem fizeti ki a bérleti díjat a fenti időpontig, annak foglalását töröljük a rendszerből.
+            Lemondás esetén, költség visszatérítés nincs!
+            Az asztal átruházható. Ennek menetéről érdeklődj Gáspárné B. Editnél.
+            </div>
+            
+            <br>
+            <!--
+            <a class="btn btn-success" href="tervrajz.png" target="_blank" role="button" title="Kattints ide a tervrajz megjelenítéséhez!">Tervrajz megjelenítése</a>
+            <br><br>
+            -->
+            
+            Asztalok száma: {{numberOfAllDesks$| async}} darab
+            <br>
+            Foglalt asztalok: {{numberOfReservedDesks$| async}} darab
+            <br>
+            Szabad asztalok: {{numberOfFreeDesks$| async}} darab
+
+        </div>
+    </div>
+
+    <div class="row">
+
+            <div *ngFor="let reservation of (reservationInfo$ | async).reservationList; let i = index" class="col-sm-6">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Asztal száma</th>
+                        <th scope="col">Státusz</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <th scope="row">{{i+1}}</th>
+                            <td *ngIf="reservation > 0">
+                                <button type="button" class="btn btn-danger">Foglalt</button>
+                            </td>
+                            <td *ngIf="reservation == 0">
+                                <a class="btn btn-success" routerLink="/deskreservation-form" [queryParams]="{ desknumber: i+1 }" queryParamsHandling="merge" routerLinkActive="active" role="button" title="Kattints ide, ha foglalni szeretnél!">
+                                    Szabad
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+    </div>
+
+</div>

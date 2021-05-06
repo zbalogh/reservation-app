@@ -1,0 +1,55 @@
+
+<div class="container">
+	 
+    <main role="main">
+
+          <div class="jumbotron">
+            <h1 class="display-5">Foglalások kezelése</h1>
+            <p class="lead">Az adminisztrációs felületen keresztül lehetőséged van a foglalások szerkesztésére vagy törlésére.</p>
+          </div>
+
+          <div class="row marketing">
+              
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Asztal száma</th>
+                    <th scope="col">Időpont</th>
+                    <th scope="col">Név</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Telefon</th>
+                    <th scope="col" colspan="2">Műveletek</th>
+                  </tr>
+                </thead>
+                <tbody>
+                        <tr *ngFor="let reservation of reservationList$ | async; let i = index">
+                        <th scope="row">{{reservation.deskNumber}}</th>
+                        <td class="text-nowrap">
+                            {{reservation.reservationAt | date:'yyyy-MM-dd HH:mm'}}
+                        </td>
+                        <td class="text-nowrap">{{reservation.lastname}} {{reservation.firstname}}</td>
+                        <td class="text-nowrap">{{reservation.email}}</td>
+                        <td class="text-nowrap">{{reservation.telephone}}</td>
+                        <td>
+                            <a class="btn btn-primary" routerLink="/deskreservation-editor" [queryParams]="{ id:reservation.id , desknumber: reservation.deskNumber, editor: true }" queryParamsHandling="merge" routerLinkActive="active" role="button" title="Kattints ide, ha módosítani szeretnéd ezt a foglalást!">Szerkesztés</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" (click)="deleteReservation(reservation, confirmModalTemplate)" role="button" title="Kattints ide, ha törölni szeretnéd ezt a foglalást!">Törlés</button>
+                        </td>
+                        </tr>  
+                </tbody>
+              </table>
+          </div>
+      
+    </main>
+
+  </div> <!-- /container -->
+
+  <ng-template #confirmModalTemplate>
+    <div class="modal-body text-center">
+      <p>Szeretnéd törölni ezt a foglalást?</p>
+      <button type="button" class="btn btn-primary" (click)="confirm()" >Igen</button>
+      &nbsp;
+      <button type="button" class="btn btn-danger" (click)="decline()" >Nem</button>
+    </div>
+  </ng-template>
