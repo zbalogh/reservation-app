@@ -1,0 +1,11 @@
+1. Run the following command to get services and LoadBalancerIP:
+
+kubectl get services -o wide
+
+kubectl get ingress -o wide
+
+kubectl get all -o wide
+
+2. To access aplication open Web browser with the IP:
+
+http://<IP-ADDRESS>/web-gui/angular-gui/

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+    name: {{ .Release.Name }}-server-deployment
+
+spec:
+    replicas: {{ .Values.apiServerReplicas }}
+    minReadySeconds: 15
+
+    selector:
+        matchLabels:
+            component: api-backend
+
+    strategy:
+        rollingUpdate:
+          maxSurge: 50%
+          maxUnavailable: 50%
+        type: RollingUpdate
+
+    template:
+        metadata:
+            labels:
+                component: api-backend
+        spec:
+            restartPolicy: Always
+            containers:
+            - name: api-backend
+              image: zbalogh/reservation-api-server:latest
+              imagePullPolicy: Always
+              readinessProbe:
+                  httpGet:
+                    path: /api/health
+                    port: 8080
+                  initialDelaySeconds: 15
+                  periodSeconds: 30
+              ports:
+                - containerPort: 8080
+              env:
+                - name: DB_HOSTNAME
+                  valueFrom:
+                    configMapKeyRef:
+                      key: DB_HOSTNAME
+                      name: {{ .Release.Name }}-configmap
+                - name: DB_PORT
+                  valueFrom:
+                    configMapKeyRef:
+                      key: DB_PORT
+                      name: {{ .Release.Name }}-configmap
+                - name: DB_NAME
+                  valueFrom:
+                    configMapKeyRef:
+                      key: DB_NAME
+                      name: {{ .Release.Name }}-configmap
+                - name: DB_USERNAME
+                  valueFrom:
+                    configMapKeyRef:
+                      key: DB_USERNAME
+                      name: {{ .Release.Name }}-configmap
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: DB_PASSWORD
+                      name: {{ .Release.Name }}-secret

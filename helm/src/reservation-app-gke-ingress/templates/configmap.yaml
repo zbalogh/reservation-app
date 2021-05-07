@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: {{ .Release.Name }}-configmap
+
+data:
+  DB_NAME: {{ .Values.databaseName }}
+  DB_HOSTNAME: {{ .Values.databaseServiceName }}
+  DB_PORT: {{ .Values.databasePort | quote }}
+  DB_USERNAME: {{ .Values.databaseUserName }}
+
+# kubectl create configmap reservation-configmap --from-literal=DB_NAME=zbaloghspringdemo --from-literal=DB_HOSTNAME=postgres-cluster-ip-service --from-literal=DB_PORT=5432 --from-literal=DB_USERNAME=postgres

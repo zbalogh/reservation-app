@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+
+metadata:
+  name: {{ .Release.Name }}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /web-gui/angular-gui/*
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /web-gui/angular-gui
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /api/*
+        backend:
+          serviceName: {{ .Values.apiServiceName }}
+          servicePort: 8080
