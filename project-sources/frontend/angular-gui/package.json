@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "bp": "ng build --prod --base-href /web-gui/angular-gui/ --output-path dist/angular-gui --output-hashing=all",
-	"bp-dist": "ng build --prod --base-href /web-gui/angular-gui/ --output-hashing=all"
+    "bp-dist": "ng build --prod --base-href /web-gui/angular-gui/ --output-hashing=all"
   },
   "private": true,
   "dependencies": {
