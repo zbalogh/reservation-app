@@ -41,6 +41,12 @@ kubectl get nodes -o wide
 kubectl get all -o wide
 
 
+kubectl scale deployment <deployment-name> --replicas=0
+
+kubectl scale deployment <deployment-name> --replicas=3
+
+
+
 Delete all configurations and deployments provided in the given folder:
 kubectl delete -f <your-folder-name>
 

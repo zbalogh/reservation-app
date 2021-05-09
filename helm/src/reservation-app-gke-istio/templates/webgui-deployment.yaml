@@ -25,7 +25,7 @@ spec:
         spec:
             containers:
             - name: angular-ui
-              image: zbalogh/reservation-angular-ui:latest
+              image: {{ .Values.webguiImage }}:latest
               imagePullPolicy: Always
               readinessProbe:
                   httpGet:

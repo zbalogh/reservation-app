@@ -4,7 +4,7 @@
 
     <groupId>com.zbalogh.reservation.apiserver</groupId>
     <artifactId>reservation-api-server</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <name>reservation-api-server</name>
 	<description>Reservation App with Spring Boot</description>
 	

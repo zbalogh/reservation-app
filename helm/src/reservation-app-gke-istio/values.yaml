@@ -19,3 +19,7 @@ apiServiceName: api-server
 webguiReplicas: "1"
 
 apiServerReplicas: "1"
+
+webguiImage: zbalogh/reservation-angular-ui
+
+apiServerImage: zbalogh/reservation-api-server
