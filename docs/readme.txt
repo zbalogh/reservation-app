@@ -4,7 +4,17 @@ README file - Reservation App
 ------------------------------
 
 #
-# Create docker image, and push to docker hub
+# Delete the existing docker images from your local image repo
+#
+
+docker rmi --force $(docker images -q 'zbalogh/reservation-api-server:latest' | uniq)
+
+docker rmi --force $(docker images -q 'zbalogh/reservation-angular-ui:latest' | uniq)
+
+
+
+#
+# Create new docker images in your local image repo
 #
 
 docker build -t zbalogh/reservation-api-server:latest -f Dockerfile .
@@ -12,6 +22,10 @@ docker build -t zbalogh/reservation-api-server:latest -f Dockerfile .
 docker build -t zbalogh/reservation-angular-ui:latest -f Dockerfile .
 
 
+
+#
+# Push docker images to the Docker Hub
+#
 
 docker push zbalogh/reservation-api-server:latest
 
@@ -110,4 +124,7 @@ helm install reservation reservation-app/reservation-app-gke-ingress
 
 # install with replicas=2 (override the default values by the "--set" keyword)
 helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2
+
+# install with replicas=2 and alldeskNumber=40 (override the default values by the "--set" keyword)
+helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2 --set alldeskNumber=40
 
