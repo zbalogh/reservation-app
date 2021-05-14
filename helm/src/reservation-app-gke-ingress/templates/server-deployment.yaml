@@ -57,6 +57,11 @@ spec:
                     configMapKeyRef:
                       key: DB_USERNAME
                       name: {{ .Release.Name }}-configmap
+                - name: RESERVATION_ALLDESK_NUMBER
+                  valueFrom:
+                    configMapKeyRef:
+                      key: RESERVATION_ALLDESK_NUMBER
+                      name: {{ .Release.Name }}-configmap
                 - name: DB_PASSWORD
                   valueFrom:
                     secretKeyRef:

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ import com.zbalogh.reservation.apiserver.resources.DeskReservationInfo;
 public class DeskReservationService {
 	
 	public static final int NUMBER_OF_ALL_DESKS = 200;
+	
+	@Value(value = "${reservation.alldesk_number}")
+    private Integer alldeskNumber;
 
 	@Autowired
 	private DeskReservationRepository repository;
@@ -41,8 +45,16 @@ public class DeskReservationService {
 	{
 		final DeskReservationInfo info = new DeskReservationInfo();
 		
+		// set the list size
+		int listSize = NUMBER_OF_ALL_DESKS;
+		
+		// if we have value from the configuration then we use it
+		if (alldeskNumber > 0) {
+			listSize = alldeskNumber;
+		}
+		
 		// initialize the list with the given size
-		info.initList(NUMBER_OF_ALL_DESKS);
+		info.initList(listSize);
 		
 		// get all existing reservations
 		final List<DeskReservation> reservations = findAll();
