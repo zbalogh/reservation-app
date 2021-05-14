@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import com.zbalogh.reservation.apiserver.resources.DeskReservationInfo;
 @Service("deskReservationService")
 @Transactional
 public class DeskReservationService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(DeskReservationService.class);
 	
 	public static final int NUMBER_OF_ALL_DESKS = 200;
 	
@@ -55,6 +59,7 @@ public class DeskReservationService {
 		
 		// initialize the list with the given size
 		info.initList(listSize);
+		logger.info("DeskReservationInfo has been initialized with size=" + listSize + " [" + alldeskNumber + "]");
 		
 		// get all existing reservations
 		final List<DeskReservation> reservations = findAll();
