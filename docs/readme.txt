@@ -80,6 +80,7 @@ Helm example: https://github.com/technosophos/tscharts
 
 
 How to Create Helm package:
+---------------------------
 
 cd helm/src
 
@@ -96,10 +97,17 @@ helm repo index docs/helm-charts --url https://zbalogh.github.io/reservation-app
 
 
 Install application from Helm package:
+--------------------------------------
 
 https://artifacthub.io/packages/helm/reservation-app/reservation-app-gke-ingress
 
-helm repo add reservation https://zbalogh.github.io/reservation-app/helm-charts
 
-helm install reservation reservation/reservation-app-gke-ingress
+# add the repository to the helm repo sources
+helm repo add reservation-app https://zbalogh.github.io/reservation-app/helm-charts
+
+# install with default replicas=1
+helm install reservation reservation-app/reservation-app-gke-ingress
+
+# install with replicas=2 (override the default values by the "--set" keyword)
+helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2
 
