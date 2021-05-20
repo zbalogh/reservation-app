@@ -4,7 +4,7 @@
 
     <groupId>com.zbalogh.reservation.apiserver</groupId>
     <artifactId>reservation-api-server</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>reservation-api-server</name>
 	<description>Reservation App with Spring Boot</description>
 	
@@ -34,23 +34,30 @@
     
     
     <dependencies>
+    	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
         <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		
-		<!--
+		
+		<!-- Spring Security with JWT based authentication/authorization -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		-->
 		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
 		</dependency>
-
+		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>

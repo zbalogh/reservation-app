@@ -1,6 +1,7 @@
-package com.zbalogh.reservation.apiserver;
+package com.zbalogh.reservation.apiserver.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -14,6 +15,16 @@ public class AppWebMvcConfigurer implements WebMvcConfigurer {
 	@Override
     public void addViewControllers(ViewControllerRegistry registry)
 	{
+    }
+	
+	@Override
+    public void addCorsMappings(CorsRegistry registry)
+	{
+		// enable CORS
+        registry.addMapping("/**")
+        	.allowedOrigins("*")
+        	.allowedMethods("*")
+        	.allowedHeaders("*");
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.zbalogh.reservation.apiserver.MyCustomBeanConfig.MyCustomBean;
+import com.zbalogh.reservation.apiserver.config.MyCustomBeanConfig.MyCustomBean;
 import com.zbalogh.reservation.apiserver.services.DatabaseInitializer;
 
 /**

@@ -16,12 +16,18 @@ webguiServiceName: webgui-cluster-ip-service
 
 apiServiceName: api-server
 
+authServiceName: auth-server
+
 webguiReplicas: "1"
 
-apiServerReplicas: "1"
+apiServerReplicas: "2"
+
+authServerReplicas: "1"
 
 webguiImage: zbalogh/reservation-angular-ui
 
 apiServerImage: zbalogh/reservation-api-server
+
+authServerImage: zbalogh/reservation-dotnet-auth-server
 
 alldeskNumber: "200"

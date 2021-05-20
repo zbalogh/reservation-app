@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
+import com.zbalogh.reservation.apiserver.config.ReservationAppConfig;
 import com.zbalogh.reservation.apiserver.dao.DeskReservationRepository;
 import com.zbalogh.reservation.apiserver.entities.DeskReservation;
 import com.zbalogh.reservation.apiserver.resources.DeskReservationInfo;
@@ -24,8 +24,8 @@ public class DeskReservationService {
 	
 	public static final int NUMBER_OF_ALL_DESKS = 200;
 	
-	@Value(value = "${reservation.alldesk_number}")
-    private Integer alldeskNumber;
+	@Autowired
+	private ReservationAppConfig reservationAppConfig;
 
 	@Autowired
 	private DeskReservationRepository repository;
@@ -45,12 +45,21 @@ public class DeskReservationService {
 		return optional.isPresent() ? optional.get() : null;
 	}
 	
+	public DeskReservation findByDeskNumber(Integer deskNumber)
+	{
+		Optional<DeskReservation> optional = repository.findByDeskNumber(deskNumber);
+		
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
 	public DeskReservationInfo getInfo()
 	{
 		final DeskReservationInfo info = new DeskReservationInfo();
 		
 		// set the list size
 		int listSize = NUMBER_OF_ALL_DESKS;
+		
+		int alldeskNumber = reservationAppConfig.getAlldeskNumber();
 		
 		// if we have value from the configuration then we use it
 		if (alldeskNumber > 0) {

@@ -2,15 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-    name: server-deployment
+    name: {{ .Release.Name }}-auth-server-deployment
 
 spec:
-    replicas: 1
+    replicas: {{ .Values.authServerReplicas }}
     minReadySeconds: 15
 
     selector:
         matchLabels:
-            component: api-backend
+            component: auth-server
 
     strategy:
         rollingUpdate:
@@ -21,44 +21,52 @@ spec:
     template:
         metadata:
             labels:
-                component: api-backend
+                component: auth-server
         spec:
             restartPolicy: Always
             containers:
-            - name: api-backend
-              image: zbalogh/reservation-api-server:latest
+            - name: auth-server
+              image: {{ .Values.authServerImage }}:latest
               imagePullPolicy: Always
+              
               readinessProbe:
                   httpGet:
-                    path: /api/health
-                    port: 8080
+                    path: /api/auth/account/health
+                    port: 5000
                   initialDelaySeconds: 15
                   periodSeconds: 30
+              
               ports:
-                - containerPort: 8080
+                - containerPort: 5000
+
               env:
                 - name: DB_HOSTNAME
                   valueFrom:
                     configMapKeyRef:
                       key: DB_HOSTNAME
-                      name: reservation-configmap
+                      name: {{ .Release.Name }}-configmap
                 - name: DB_PORT
                   valueFrom:
                     configMapKeyRef:
                       key: DB_PORT
-                      name: reservation-configmap
+                      name: {{ .Release.Name }}-configmap
                 - name: DB_NAME
                   valueFrom:
                     configMapKeyRef:
                       key: DB_NAME
-                      name: reservation-configmap
+                      name: {{ .Release.Name }}-configmap
                 - name: DB_USERNAME
                   valueFrom:
                     configMapKeyRef:
                       key: DB_USERNAME
-                      name: reservation-configmap
+                      name: {{ .Release.Name }}-configmap
                 - name: DB_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: DB_PASSWORD
-                      name: reservation-secret
+                      name: {{ .Release.Name }}-secret
+
+            initContainers:
+              - name: init-{{ .Release.Name }}-postgresql
+                image: postgres:9.6
+                command: ['sh', '-c', 'until pg_isready -h {{ .Values.databaseServiceName }} -p {{ .Values.databasePort }}; do echo waiting for database; sleep 2; done; sleep 15;']

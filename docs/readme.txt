@@ -11,6 +11,8 @@ docker rmi --force $(docker images -q 'zbalogh/reservation-api-server:latest' | 
 
 docker rmi --force $(docker images -q 'zbalogh/reservation-angular-ui:latest' | uniq)
 
+docker rmi --force $(docker images -q 'zbalogh/reservation-dotnet-auth-server:latest' | uniq)
+
 
 
 #
@@ -21,6 +23,8 @@ docker build -t zbalogh/reservation-api-server:latest -f Dockerfile .
 
 docker build -t zbalogh/reservation-angular-ui:latest -f Dockerfile .
 
+docker build -t zbalogh/reservation-dotnet-auth-server:latest -f Dockerfile .
+
 
 
 #
@@ -30,6 +34,9 @@ docker build -t zbalogh/reservation-angular-ui:latest -f Dockerfile .
 docker push zbalogh/reservation-api-server:latest
 
 docker push zbalogh/reservation-angular-ui:latest
+
+docker push zbalogh/reservation-dotnet-auth-server:latest
+
 
 
 ########################################################################################

@@ -1,2 +1,2 @@
 
-ReservationApp repository with Nginx Ingress Controller.
+ReservationApp repository with Ingress Controller.

@@ -1,10 +1,8 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 
 metadata:
   name: {{ .Release.Name }}-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 
 spec:
   rules:
@@ -25,7 +23,12 @@ spec:
           serviceName: {{ .Values.webguiServiceName }}
           servicePort: 80
 
-      - path: /api/*
+      - path: /api/data/*
         backend:
           serviceName: {{ .Values.apiServiceName }}
           servicePort: 8080
+
+      - path: /api/auth/*
+        backend:
+          serviceName: {{ .Values.authServiceName }}
+          servicePort: 5000

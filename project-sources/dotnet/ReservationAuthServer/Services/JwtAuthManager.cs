@@ -39,6 +39,7 @@ namespace ReservationAuthServer.Services
                 Subject = new ClaimsIdentity(new[]
                 { 
                     new Claim("id", userid.ToString()),
+                    new Claim("sub", username),
                     new Claim("username", username)
                 }),
                 // set "expires" for 365 days

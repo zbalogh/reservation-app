@@ -25,7 +25,7 @@ namespace ReservationAuthServer.Services
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
         private List<User> _users = new List<User>
         {
-            new User { Id = 1, FirstName = "Admin", LastName = "User", Username = "admin", Password = "12345" }
+            new User { Id = 1, FirstName = "Admin", LastName = "User", Username = "admin", Password = "adm1w4K6B8" }
         };
 
         private readonly AppSettings _appSettings;

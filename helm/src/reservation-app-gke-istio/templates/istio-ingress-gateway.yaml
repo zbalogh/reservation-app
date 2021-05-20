@@ -41,9 +41,17 @@ spec:
               number: 80
     - match:
         - uri:
-            prefix: /api
+            prefix: /api/data
       route:
         - destination:
             host: {{ .Values.apiServiceName }}
             port:
               number: 8080
+    - match:
+        - uri:
+            prefix: /api/auth
+      route:
+        - destination:
+            host: {{ .Values.authServiceName }}
+            port:
+              number: 5000

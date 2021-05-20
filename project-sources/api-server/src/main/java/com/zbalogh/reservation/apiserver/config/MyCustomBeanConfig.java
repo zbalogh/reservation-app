@@ -1,4 +1,4 @@
-package com.zbalogh.reservation.apiserver;
+package com.zbalogh.reservation.apiserver.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -91,7 +91,8 @@ export class DeskreservationEditorComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    this.entityService.upsert(this.deskReservation)
+    // updating the existing desk reservation entity in both NgRx cache and remote server
+    this.entityService.update(this.deskReservation)
     .subscribe(
         (data) => {
             // set the 'deskReservation' with the given data

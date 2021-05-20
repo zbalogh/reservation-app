@@ -24,11 +24,20 @@ namespace ReservationAuthServer.Controllers
             var response = _userService.Authenticate(model);
 
             if (response == null) {
-                //return BadRequest(new { message = "Username or password is incorrect" });
-                return Unauthorized(new { message = "Username or password is incorrect" });
+                // We send Bad Request (400) response message if the authentication failed.
+                // With that way, we can distinguish between the cases when access to Unauthorized (401, 403) page OR Authentication Failure (400)
+                return BadRequest(new { message = "Username or password is incorrect" });
+                //return Unauthorized(new { message = "Username or password is incorrect" });
             }
-
+            
             return Ok(response);
+        }
+
+        [HttpGet("health")]
+        public IActionResult HealthCheck()
+        {
+            // just return 200 OK without body
+            return Ok();
         }
     }
 

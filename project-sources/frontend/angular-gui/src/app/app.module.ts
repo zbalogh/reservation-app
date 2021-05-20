@@ -2,7 +2,7 @@ import { entityConfig, defaultDataServiceConfig } from './store/entity-metadata'
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +26,8 @@ import { ManageDeskreservationComponent } from './admin/manage-deskreservation/m
 import { DeskreservationEditorComponent } from './admin/deskreservation-editor/deskreservation-editor.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LoginComponent } from './auth/login/login.component';
+import { JwtInterceptor } from './auth/jwt.interceptor';
+import { ErrorInterceptor } from './auth/error.interceptor';
 
 
 @NgModule({
@@ -77,7 +79,11 @@ import { LoginComponent } from './auth/login/login.component';
 
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
-  providers: [{ provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig }],
+  providers: [
+    { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
