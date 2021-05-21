@@ -44,3 +44,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Other files
+myconfidental.txt
+myconfidental.md

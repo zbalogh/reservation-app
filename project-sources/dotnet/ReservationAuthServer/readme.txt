@@ -23,11 +23,15 @@ https://github.com/dotnet/dotnet-docker/blob/main/samples/run-aspnetcore-https-d
 
 
 
+# Clean
+dotnet clean
+
 # Build
 dotnet build
 
 # Publish for release
 dotnet publish -c Release -o out/Release/publish
+
 
 
 # Build Docker image:
