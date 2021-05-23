@@ -1,2 +1,2 @@
 
-ReservationApp repository with Ingress Controller.
+ReservationApp repository with GKE Ingress Controller.
