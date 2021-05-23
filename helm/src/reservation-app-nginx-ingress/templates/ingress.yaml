@@ -9,8 +9,7 @@ metadata:
 
 spec:
   rules:
-  - host: *
-    http:
+  - http:
       paths:
       - path: /api/data/.*
         backend:
