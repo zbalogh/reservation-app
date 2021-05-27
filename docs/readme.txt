@@ -153,3 +153,6 @@ helm install reservation reservation-app/reservation-app-gke-ingress --set webgu
 # install with replicas=2 and alldeskNumber=40 (override the default values by the "--set" keyword)
 helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2 --set alldeskNumber=40
 
+# install with replicas=2, alldeskNumber=40, and set the passwords (override the default values by the "--set" keyword)
+helm install reservation reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2 --set authServerReplicas=2 --set databasePassword=dbadmin123 --set adminUserPassword=pwd123 --set alldeskNumber=40
+

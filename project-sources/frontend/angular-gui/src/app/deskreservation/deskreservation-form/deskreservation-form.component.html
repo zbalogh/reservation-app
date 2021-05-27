@@ -12,6 +12,11 @@
 
     <div *ngIf="!submitted">
 
+        <div *ngIf="message">
+            <h3 class="display-6 text-danger">{{message}}</h3>
+            <br>
+        </div>
+
         <div class="jumbotron">
             <h1 class="display-5">Adatok megadása</h1>
             <p class="-lead">Az asztal foglalásához töltsd ki az űrlapot.</p>

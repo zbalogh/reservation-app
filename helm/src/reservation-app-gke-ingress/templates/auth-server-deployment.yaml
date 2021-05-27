@@ -65,6 +65,11 @@ spec:
                     secretKeyRef:
                       key: DB_PASSWORD
                       name: {{ .Release.Name }}-secret
+                - name: ADMIN_USER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: ADMIN_USER_PASSWORD
+                      name: {{ .Release.Name }}-secret
 
             initContainers:
               - name: init-{{ .Release.Name }}-postgresql

@@ -26,6 +26,9 @@ export class DeskreservationFormComponent implements OnInit {
   // it is true if the form is submitted
   submitted = false;
 
+  // message to display error/warning or any other messages for the user
+  message = '';
+
   // it represents the model object for the form
   deskReservation: DeskReservation = {} as DeskReservation;
 
@@ -75,6 +78,7 @@ export class DeskreservationFormComponent implements OnInit {
           },
           (err) => {
             console.log('error while saving the desk reservation: ' + err);
+            this.message = 'A foglalás sikertelen. Lehet, hogy az asztal már foglalt.';
           }
       );
   }

@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,7 +77,10 @@ public class DeskReservationNgrxDataController
 	@RequestMapping(value="/deskreservation", method = RequestMethod.POST)
 	public ResponseEntity<DeskReservation> add(@RequestBody DeskReservation entity, HttpServletRequest request, HttpServletResponse response)
 	{
+		boolean isUpdate = false;
+		
 		if (entity.getId() == null || entity.getId() <= 0) {
+			isUpdate = false;
 			// ID is null or zero, so it's a creation request to insert new item into the database.
 			// let's check whether we have already an item with the given desk number.
 			// If so then we response an error with a status code
@@ -89,6 +93,7 @@ public class DeskReservationNgrxDataController
 			}
 		}
 		else {
+			isUpdate = true;
 			// if ID is not zero then it's an update request
 			// in that case, we have to check if the user is authenticated with administrator role
 			if ( !isAdminUserAuthenticated() ) {
@@ -96,6 +101,15 @@ public class DeskReservationNgrxDataController
 				// response with status forbidden
 				return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 			}
+		}
+		
+		try {
+			validate(entity, isUpdate);
+		}
+		catch (Exception ex) {
+			logger.error("Validation failed: " + ex.getMessage(), ex);
+			// response with status bad request
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		
 		entity = service.save(entity);
@@ -107,6 +121,15 @@ public class DeskReservationNgrxDataController
 	@RequestMapping(value="/deskreservation/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<DeskReservation> update(@PathVariable long id, @RequestBody DeskReservation entity, HttpServletRequest request, HttpServletResponse response)
 	{
+		try {
+			validate(entity, true);
+		}
+		catch (Exception ex) {
+			logger.error(ex.getMessage());
+			// response with status bad request
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
 		entity = service.save(entity);
 		
 		return new ResponseEntity<>(entity, HttpStatus.OK);
@@ -153,4 +176,34 @@ public class DeskReservationNgrxDataController
 		
 		return authenticated;
 	}
+	
+	/**
+	 * Validate the given entity. If validation fails then it throws Exception.
+	 * @param entity
+	 * @param isUpdate
+	 */
+	private void validate(DeskReservation entity, boolean isUpdate) throws Exception
+	{
+		Assert.notNull(entity, "The entity is null.");
+		
+		if (isUpdate) {
+			Assert.isTrue(entity.getId() != null && entity.getId() > 0, "ID field must be greater than zero.");
+		}
+		else {
+			Assert.isTrue(entity.getId() == null || entity.getId() == 0, "ID field must be null or zero.");
+		}
+		
+		int alldesk = service.getAlldeskNumber();
+		
+		Assert.notNull(entity.getDeskNumber(), "Desk number field must not be null.");
+		Assert.isTrue(entity.getDeskNumber() >= 1 && entity.getDeskNumber() <= alldesk, "Desk number field is invalid.");
+		
+		Assert.hasText(entity.getFirstname(), "Firstname must not be empty.");
+		Assert.hasText(entity.getLastname(), "Lastname must not be empty.");
+		Assert.hasText(entity.getEmail(), "Email must not be empty.");
+		Assert.hasText(entity.getTelephone(), "Telephone must not be empty.");
+		
+		Assert.isTrue(entity.getStatus() != null && entity.getStatus() > 0, "Status field is invalid.");
+	}
+
 }

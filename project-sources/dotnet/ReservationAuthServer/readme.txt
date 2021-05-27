@@ -22,6 +22,19 @@ https://github.com/dotnet/dotnet-docker/blob/main/samples/run-aspnetcore-https-d
 
 
 
+#
+# How to set environment variables in different ways
+#
+https://dejanstojanovic.net/aspnet/2018/july/different-ways-to-set-environment-for-net-core-application/
+
+https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0
+
+
+
+#####################################################################################
+#####################################################################################
+#####################################################################################
+
 
 # Clean
 dotnet clean

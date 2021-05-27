@@ -25,5 +25,33 @@ namespace ReservationAuthServer.Controllers
             var users = _userService.GetAll();
             return Ok(users);
         }
+
+        [Authorize]
+        [HttpGet("id/{id}")]
+        public IActionResult GetUserById(int id)
+        {
+            User user = _userService.GetById(id);
+
+            if (user != null) {
+                return Ok(user);
+            }
+            else {
+                return NotFound();
+            }
+        }
+
+        [Authorize]
+        [HttpGet("username/{username}")]
+        public IActionResult GetUserByUsername(string username)
+        {
+            User user = _userService.GetByUsername(username);
+
+            if (user != null) {
+                return Ok(user);
+            }
+            else {
+                return NotFound();
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-# Default values for csemeteborze-gke.
+# Default values are defined here.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -10,7 +10,11 @@ databasePort: "5432"
 
 databaseUserName: postgres
 
-databasePassword: MTIzZGJzZWNyZXQ=
+# default database password. It can be overriden by CLI parameter.
+databasePassword: 123dbsecret
+
+# default admin user password. It can be overriden by CLI parameter.
+adminUserPassword: adm1w4K6B8
 
 webguiServiceName: webgui-cluster-ip-service
 
