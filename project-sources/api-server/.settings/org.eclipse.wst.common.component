@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/protobuf/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/protobuf/grpc-java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/proto"/>
         <property name="java-output-path" value="/reservation-api-server/target/classes"/>
         <property name="context-root" value="reservation-api-server"/>
     </wb-module>

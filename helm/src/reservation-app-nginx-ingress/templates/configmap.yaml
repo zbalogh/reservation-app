@@ -10,5 +10,6 @@ data:
   DB_PORT: {{ .Values.databasePort | quote }}
   DB_USERNAME: {{ .Values.databaseUserName }}
   RESERVATION_ALLDESK_NUMBER: {{ .Values.alldeskNumber | quote }}
+  RESERVATION_AUTH_SERVER_NAME: {{ .Values.authServiceName }}
 
 # kubectl create configmap reservation-configmap --from-literal=DB_NAME=zbaloghspringdemo --from-literal=DB_HOSTNAME=postgres-cluster-ip-service --from-literal=DB_PORT=5432 --from-literal=DB_USERNAME=postgres

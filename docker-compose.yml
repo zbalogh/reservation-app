@@ -22,6 +22,7 @@ services:
       DB_NAME: zbaloghspringdemo
       DB_USERNAME: postgres
       DB_PASSWORD: 123dbsecret
+      RESERVATION_AUTH_SERVER_NAME: auth-server
     networks:
       - zbalogh-reservation-network
 
@@ -29,6 +30,7 @@ services:
     image: zbalogh/reservation-dotnet-auth-server:latest
     ports:
       - "5000:5000"
+      - "5002:5002"
     restart: always
     depends_on:
       - "database-server"

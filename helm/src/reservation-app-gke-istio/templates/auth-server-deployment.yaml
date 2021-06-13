@@ -38,6 +38,9 @@ spec:
               
               ports:
                 - containerPort: 5000
+                  name: authc-web-port
+                - containerPort: 5002
+                  name: authc-grpc-port
 
               env:
                 - name: DB_HOSTNAME

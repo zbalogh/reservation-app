@@ -46,21 +46,24 @@ dotnet build
 dotnet publish -c Release -o out/Release/publish
 
 
+# Delete the old docker image from your local machine
+docker rmi --force $(docker images -q 'zbalogh/reservation-dotnet-auth-server:latest' | uniq)
 
-# Build Docker image:
+
+# Build Docker image
 docker build -t zbalogh/reservation-dotnet-auth-server:latest -f Dockerfile .
 
 
-# Push the image to the docker hub:
+# Push the image to the docker hub
 docker push zbalogh/reservation-dotnet-auth-server:latest
 
 
-# run interactive mode:
-docker run --rm -it -p 5000:5000 --name reservation-dotnet-auth-server zbalogh/reservation-dotnet-auth-server:latest
+# run interactive mode
+docker run --rm -it -p 5000:5000 -p 5002:5002 --name reservation-dotnet-auth-server zbalogh/reservation-dotnet-auth-server:latest
 
 
-# run as daemon:
-docker run --rm -d -p 5000:5000 --name reservation-dotnet-auth-server zbalogh/reservation-dotnet-auth-server:latest
+# run as daemon
+docker run --rm -d -p 5000:5000 -p 5002:5002 --name reservation-dotnet-auth-server zbalogh/reservation-dotnet-auth-server:latest
 
 
 

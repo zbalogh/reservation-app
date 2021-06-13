@@ -11,6 +11,9 @@ public class ReservationAppConfig {
 	
 	@Value(value = "${reservation.jwt_secret_key}")
     private String jwtSecretKey;
+	
+	@Value(value = "${reservation.authServerName}")
+	private String authServerName;
 
 
 	public Integer getAlldeskNumber() {
@@ -19,6 +22,10 @@ public class ReservationAppConfig {
 
 	public String getJwtSecretKey() {
 		return jwtSecretKey;
+	}
+
+	public String getAuthServerName() {
+		return authServerName;
 	}
 
 }

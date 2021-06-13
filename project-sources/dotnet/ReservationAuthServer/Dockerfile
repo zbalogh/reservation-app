@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 
 EXPOSE 5000
+EXPOSE 5002
 
 WORKDIR /app
 

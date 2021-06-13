@@ -41,6 +41,11 @@ namespace ReservationAuthServer
             });
             Console.WriteLine("CORS enabled.");
 
+            // Add routing
+            services.AddRouting();
+            Console.WriteLine("Routing added.");
+
+            // add controllers
             services.AddControllers();
             Console.WriteLine("Controllers added.");
 
@@ -48,9 +53,14 @@ namespace ReservationAuthServer
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             Console.WriteLine("AppSettings added.");
 
+            // add GRPC service
+            services.AddGrpc();
+            Console.WriteLine("gRPC added.");
+
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
+            services.AddScoped<UserGrpcService>();
             Console.WriteLine("Configured DI.");
 
             services.AddSwaggerGen(c =>
@@ -68,10 +78,6 @@ namespace ReservationAuthServer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else {
-                // do not use auto-redirect
-                //app.UseHttpsRedirection();
             }
 
             app.UseSwagger(c =>
@@ -98,7 +104,11 @@ namespace ReservationAuthServer
 
             app.UseEndpoints(endpoints =>
             {
+                // Map REST Controllers
                 endpoints.MapControllers();
+
+                 // Map GRPC Services
+                endpoints.MapGrpcService<UserGrpcService>();
             });
 
             Console.WriteLine("Configure(): method finished.");

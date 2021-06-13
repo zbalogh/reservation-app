@@ -24,6 +24,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.zbalogh.reservation.apiserver.grpc.services.UserGrpcService;
+import com.zbalogh.reservation.apiserver.grpc.stub.UserGRPC.UserResponse;
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter
 {
@@ -31,6 +34,9 @@ public class JwtRequestFilter extends OncePerRequestFilter
 
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private UserGrpcService userGrpcService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException
@@ -65,7 +71,7 @@ public class JwtRequestFilter extends OncePerRequestFilter
 				if (username != null && authentication == null)
 				{
 					// validate JWT token
-					if (jwtUtil.validateToken(jwt))
+					if ( jwtUtil.validateToken(jwt) && checkUserExistsOnAuthServer(username) )
 					{
 						// token is valid
 						// create UserDetails object for the given user name
@@ -112,6 +118,39 @@ public class JwtRequestFilter extends OncePerRequestFilter
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
 		return new User(username, "", authorities);
+	}
+	
+	/**
+	 * Check the given user on the Authentication Server via GRPC.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	private boolean checkUserExistsOnAuthServer(String username)
+	{
+		boolean userExists = false;
+		
+		try {
+			UserResponse response = userGrpcService.findUserByName(username);
+			
+			if (response != null) {
+				logger.info("User '" + username + "' exists on the Authentication Server. | " + response.getFirstname() + " " + response.getLastname());
+				userExists = true;
+			}
+			else {
+				logger.info("User '" + username + "' does not exist on the Authentication Server.");
+				userExists = false;
+			}
+		}
+		catch (Exception ex) {
+			logger.error("Exception while checking user '" + username + "' on the authentication server via GRPC.", ex);
+			// if authentication server is not available or any error occurs then we return true
+			// actually the JWT token is validated before executing this method, so should not be big problem to return true in that case.
+			// NOTE: We are thinking and looking for better solution...
+			userExists = true;
+		}
+		
+		return userExists;
 	}
 
 }

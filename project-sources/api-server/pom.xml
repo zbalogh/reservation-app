@@ -4,7 +4,7 @@
 
     <groupId>com.zbalogh.reservation.apiserver</groupId>
     <artifactId>reservation-api-server</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>reservation-api-server</name>
 	<description>Reservation App with Spring Boot</description>
 	
@@ -58,11 +58,25 @@
 		</dependency>
 		
 		
+		<!-- GRPC libraries -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>1.28.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>1.28.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>1.28.1</version>
+		</dependency>
+		
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -201,7 +215,37 @@
 
 
     <build>
+    	<defaultGoal>clean generate-sources compile install</defaultGoal>
+		
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.6.2</version>
+			</extension>
+		</extensions>
+		
         <plugins>
+        	<!-- compile proto file into java files. -->
+			<plugin>
+		      <groupId>org.xolstice.maven.plugins</groupId>
+		      <artifactId>protobuf-maven-plugin</artifactId>
+		      <version>0.6.1</version>
+		      <configuration>
+		        <protocArtifact>com.google.protobuf:protoc:3.14.0:exe:${os.detected.classifier}</protocArtifact>
+		        <pluginId>grpc-java</pluginId>
+		        <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.38.0:exe:${os.detected.classifier}</pluginArtifact>
+		      </configuration>
+		      <executions>
+		        <execution>
+		          <goals>
+		            <goal>compile</goal>
+		            <goal>compile-custom</goal>
+		          </goals>
+		        </execution>
+		      </executions>
+		    </plugin>
+		    
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

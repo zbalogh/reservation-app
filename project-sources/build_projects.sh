@@ -25,9 +25,9 @@ npm run bp-dist
 
 
 cd $BASE_DIR/dotnet/ReservationAuthServer
-rm -rf bin/Release
+#rm -rf bin/Release
 rm -rf out/Release
-rm -rf obj/Release
+#rm -rf obj/Release
 dotnet clean
 dotnet build
 dotnet publish -c Release -o out/Release/publish

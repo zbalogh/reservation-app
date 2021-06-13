@@ -10,7 +10,11 @@ spec:
   selector:
     component: auth-server
   ports:
-    - name: auth-server-port
+    - name: auth-server-web-port
       port: 5000
       targetPort: 5000
       nodePort: 31950
+    - name: auth-server-grpc-port
+      port: 5002
+      targetPort: 5002
+      nodePort: 31952

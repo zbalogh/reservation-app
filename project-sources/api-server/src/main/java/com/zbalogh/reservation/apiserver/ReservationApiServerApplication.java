@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.zbalogh.reservation.apiserver.config.MyCustomBeanConfig.MyCustomBean;
+import com.zbalogh.reservation.apiserver.grpc.services.UserGrpcService;
 import com.zbalogh.reservation.apiserver.services.DatabaseInitializer;
 
 /**
@@ -38,6 +39,9 @@ public class ReservationApiServerApplication implements CommandLineRunner {
 	// only for testing the @Bean annotation in the MyCustomBeanConfig class
 	@Autowired
 	private MyCustomBean myCustomBean;
+	
+	@Autowired
+	private UserGrpcService userGrpcService;
 	
 	
 	/**
@@ -67,6 +71,14 @@ public class ReservationApiServerApplication implements CommandLineRunner {
 		
 		// only for testing the @Bean annotation in the MyCustomBeanConfig class
 		logger.info("myCustomBean: " + myCustomBean + " | name=" + myCustomBean.getName() + ", title=" + myCustomBean.getTitle());
+		
+		// initialize UserGrpcClient with host and port
+		try {
+			userGrpcService.init();
+		}
+		catch (Exception ex) {
+			logger.error("Exception while initializing UserGrpcClient.", ex);
+		}
 	}
 
 }
