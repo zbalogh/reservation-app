@@ -7,17 +7,17 @@
     <form #loginForm="ngForm">
         <div *ngIf="!isLoggedin()" class="form-row">
             <div class="form-group col-md-6">
-                <label for="username">Felhasználónév</label>
+                <label for="username">{{ 'loginPage.username' | translate }}</label>
                 <input type="text" class="form-control" id="username" name="username"
-                    placeholder="Felhasználónév"
+                    placeholder="{{ 'loginPage.username' | translate }}"
                     required
                     [(ngModel)]="username">
             </div>
             
             <div class="form-group col-md-6">
-                <label for="password">Jelszó</label>
+                <label for="password">{{ 'loginPage.password' | translate }}</label>
                 <input type="password" class="form-control" id="password" name="password"
-                    placeholder="Jelszó"
+                    placeholder="{{ 'loginPage.password' | translate }}"
                     required
                     [(ngModel)]="password">
             </div>
@@ -25,8 +25,8 @@
     </form>
 
     <p>
-    <button class="btn btn-primary" (click)="login()"  *ngIf="!isLoggedin()" [disabled]="!loginForm.form.valid">Bejelentkezés</button>
-    <button class="btn btn-primary" (click)="logout()" *ngIf="isLoggedin()">Kijelentkezés</button>
+    <button class="btn btn-primary" (click)="login()"  *ngIf="!isLoggedin()" [disabled]="!loginForm.form.valid">{{ 'loginPage.loginbutton' | translate }}</button>
+    <button class="btn btn-primary" (click)="logout()" *ngIf="isLoggedin()">{{ 'loginPage.logoutbutton' | translate }}</button>
     </p>
 
 

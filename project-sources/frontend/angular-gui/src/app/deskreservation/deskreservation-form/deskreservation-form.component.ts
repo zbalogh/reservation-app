@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import * as fromInfoActions from '../../store/actions/desk-reservation-info.actions';
 import { DeskReservation } from '../reservation.model';
 import { DeskReservationState } from './../../store/reducers/desk-reservation.reducer';
@@ -29,6 +30,9 @@ export class DeskreservationFormComponent implements OnInit {
   // message to display error/warning or any other messages for the user
   message = '';
 
+  // to show error message when the reservation fails
+  reservationfailedMsg = '';
+
   // it represents the model object for the form
   deskReservation: DeskReservation = {} as DeskReservation;
 
@@ -38,8 +42,14 @@ export class DeskreservationFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private store: Store<DeskReservationState>,
-    private entityService: DeskReservationEntityService
-  ) {}
+    private entityService: DeskReservationEntityService,
+    private translate: TranslateService
+  ) {
+        // get the translated labels/messages
+        this.translate.get('reservationPage.reservationfailed').subscribe( str => {
+          this.reservationfailedMsg = str;
+      });
+  }
 
   ngOnInit() {
     // get the desk number
@@ -78,7 +88,7 @@ export class DeskreservationFormComponent implements OnInit {
           },
           (err) => {
             console.log('error while saving the desk reservation: ' + err);
-            this.message = 'A foglalás sikertelen. Lehet, hogy az asztal már foglalt.';
+            this.message = this.reservationfailedMsg;
           }
       );
   }

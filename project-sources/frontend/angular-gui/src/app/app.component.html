@@ -299,13 +299,13 @@
   <!-- navigation menu -->
   <div align="center">
       <nav>
-        <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Kezdőlap</a>
+        <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ 'menu.mainpage' | translate }}</a>
 
-        <a routerLink="/deskreservation" routerLinkActive="active">Asztalfoglalás</a>
+        <a routerLink="/deskreservation" routerLinkActive="active">{{ 'menu.deskreservation' | translate }}</a>
 
-        <a routerLink="/admin/settings" routerLinkActive="active">Adminisztráció</a>
+        <a routerLink="/admin/settings" routerLinkActive="active">{{ 'menu.administration' | translate }}</a>
 
-        <a routerLink="/login" routerLinkActive="active" *ngIf="isLoggedin()">Kijelentkezés</a>
+        <a routerLink="/login" routerLinkActive="active" *ngIf="isLoggedin()">{{ 'menu.logoutpage' | translate }}</a>
 
       </nav>
   </div>

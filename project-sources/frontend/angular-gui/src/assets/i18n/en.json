@@ -1,0 +1,83 @@
+{
+	"headtitle": "Reservation",
+
+	"pageNotFound": "The requested page not found.",
+
+	"menu": {
+		"deskreservation": "Desk Reservation",
+		"mainpage": "Home",
+		"administration": "Administration",
+		"logoutpage": "Logout"
+	},
+
+	"homePage" : {
+		"title": "Desk Reservation",
+		"button": "Desk Reservation",
+		"guide" : {
+			"part1" : "Guide to the online booking",
+			"part2" : "Click the DESK RESERVATION button.",
+			"part3" : "Search for the desk number in the list and click on the FREE button. If it is already reserved, please look for another.",
+			"part4" : "On the next page fill out the form and click on the RESERVATION button after accepting the terms."
+		}
+	},
+
+	"reservationPage" : {
+		"title": "Desk Reservations",
+		"text1": "Choose the desk you want to reserve. Fill out the form and click on the RESERVATION button.",
+		"allDesks": "All desks",
+		"reservedDesks": "Reserved desks",
+		"freeDesks": "Free desks",
+		"pieces": "pieces",
+		"desknumber": "Number",
+		"status": "Status",
+		"reservedButton": "Reserved",
+		"freeButton": "Free",
+		"freeButtonHint": "Click here, if you want to reserve this desk.",
+		"reservationfailed": "The reservation failed. The selected desk may already be reserved.",
+		"reservationSuccess": "The reservation has been successfully done!",
+		"selectedDesk": "The selected desk",
+		"backToDeskList": "Back to the desk list",
+		"enterData": "Desk Reservation",
+		"fillForm": "Please fill in the form.",
+		"lastname": "Lastname",
+		"firstname": "Firstname",
+		"email": "Email",
+		"phonenumber": "Phone",
+		"acceptTerms": "I accept the terms.",
+		"reserveButton": "Reserve"
+	},
+
+	"reservationEditorPage" : {
+		"title": "Manage Reservations",
+		"description": "You can edit or delete the desk reservations by using this administration page.",
+		"desknumber": "Number",
+		"time": "Time",
+		"email": "Email",
+		"phonenumber": "Phone",
+		"fullname": "Name",
+		"actions": "Actions",
+		"editorButtonLabel": "Click here, if you want to edit this reservation!",
+		"editorButton": "Edit",
+		"deleteButtonLabel": "Click here, if you want to delete this reservation!",
+		"deleteButton": "Delete",
+		"deleteConfirmation": "Do you want to delete this reservsation?",
+		"deleteYes": "Yes",
+		"deleteNo": "No",
+		"saveSuccess": "The reservation has been successfully saved!",
+		"editReservation": "Edit Reservation",
+		"editorDescription": "You can modify here the selected reservation.",
+		"saveButton": "Save"
+	},
+
+	"loginPage" : {
+		"text1": "In order to sign out, please click on the Logout button.",
+		"text2" : "In order to sign in, please click on the Login button.",
+		"text3" : "Authentication in progress...",
+		"text4" : "Invalid username or password!",
+		"username": "Username",
+		"password": "Password",
+		"loginbutton": "Login",
+		"logoutbutton": "Logout"
+	}
+
+}

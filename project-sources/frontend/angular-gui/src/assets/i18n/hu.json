@@ -1,0 +1,83 @@
+{
+	"headtitle": "Asztalfoglalás",
+
+	"pageNotFound": "The requested page not found.",
+
+	"menu": {
+		"deskreservation": "Asztalfoglalás",
+		"mainpage": "Kezdőlap",
+		"administration": "Adminisztráció",
+		"logoutpage": "Kijelentkezés"
+	},
+
+	"homePage" : {
+		"title": "Asztalfoglalás",
+		"button": "Asztalfoglalás",
+		"guide" : {
+			"part1" : "Útmutató az online foglaláshoz",
+			"part2" : "Kattints az ASZTALFOGLALÁS gombra.",
+			"part3" : "Az asztal számát keresd meg a listában, és kattints a SZABAD gombra. Amennyiben már foglalt, keress másikat.",
+			"part4" : "A megjelenő oldalon töltsd ki az adataidat, és a feltételek elfogadása után kattints a FOGLALÁS gombra."
+		}
+	},
+
+	"reservationPage" : {
+		"title": "Asztalfoglalások megjelenítése",
+		"text1": "Válaszd ki azt az asztalt, amit szeretnél lefoglalni. Töltsd ki az űrlapot és kattints a FOGLALÁS gombra.",
+		"allDesks": "Asztalok száma",
+		"reservedDesks": "Foglalt asztalok",
+		"freeDesks": "Szabad asztalok",
+		"pieces": "darab",
+		"desknumber": "Asztal száma",
+		"status": "Státusz",
+		"reservedButton": "Foglalt",
+		"freeButton": "Szabad",
+		"freeButtonHint": "Kattints ide, ha foglalni szeretnél.",
+		"reservationfailed": "A foglalás sikertelen. Lehet, hogy az asztal már foglalt.",
+		"reservationSuccess": "A foglalás sikeresen megtörtént!",
+		"selectedDesk": "Kiválasztott asztal",
+		"backToDeskList": "Vissza az asztalok listájához",
+		"enterData": "Adatok megadása",
+		"fillForm": "Az asztal foglalásához töltsd ki az űrlapot.",
+		"lastname": "Vezetéknév",
+		"firstname": "Keresztnév",
+		"email": "Email",
+		"phonenumber": "Telefonszám",
+		"acceptTerms": "Elfogadom a feltételeket.",
+		"reserveButton": "Foglalás"
+	},
+
+	"reservationEditorPage" : {
+		"title": "Foglalások kezelése",
+		"description": "Az adminisztrációs felületen keresztül lehetőséged van a foglalások szerkesztésére vagy törlésére.",
+		"desknumber": "Asztal száma",
+		"time": "Időpont",
+		"email": "Email",
+		"phonenumber": "Telefonszám",
+		"fullname": "Név",
+		"actions": "Műveletek",
+		"editorButtonLabel": "Kattints ide, ha módosítani szeretnéd ezt a foglalást!",
+		"editorButton": "Szerkesztés",
+		"deleteButtonLabel": "Kattints ide, ha törölni szeretnéd ezt a foglalást!",
+		"deleteButton": "Törlés",
+		"deleteConfirmation": "Szeretnéd törölni ezt a foglalást?",
+		"deleteYes": "Igen",
+		"deleteNo": "Nem",
+		"saveSuccess": "Adatok mentése megtörtént!",
+		"editReservation": "Foglalás szerkesztése",
+		"editorDescription": "Itt módosíthatod a kiválasztott asztalfoglalás adatait.",
+		"saveButton": "Mentés"
+	},
+
+	"loginPage" : {
+		"text1": "A kilépéshez kattints a Kijelentkezés gombra.",
+		"text2" : "A belépéshez kattints a Bejelentkezés gombra.",
+		"text3" : "Bejelentkezés és hitelesítés folyamatban...",
+		"text4" : "Helytelen felhasználónév vagy jelszó!",
+		"username": "Felhasználónév",
+		"password": "Jelszó",
+		"loginbutton": "Bejelentkezés",
+		"logoutbutton": "Kijelentkezés"
+	}
+
+}

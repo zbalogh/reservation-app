@@ -28,6 +28,15 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { LoginComponent } from './auth/login/login.component';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { ErrorInterceptor } from './auth/error.interceptor';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 
 @NgModule({
@@ -50,6 +59,13 @@ import { ErrorInterceptor } from './auth/error.interceptor';
     ReactiveFormsModule,
     NgbModule,
     ModalModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: (createTranslateLoader),
+          deps: [HttpClient]
+      }
+  }),
     AppRoutingModule,
 
     // register the root state
