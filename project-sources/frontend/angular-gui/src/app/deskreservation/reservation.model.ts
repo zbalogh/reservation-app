@@ -16,6 +16,7 @@ export interface DeskReservation {
 
     telephone: string;
 
+    reservationIdentifier: string;
 }
 
 export function compareDeskReservation(c1: DeskReservation, c2: DeskReservation) {

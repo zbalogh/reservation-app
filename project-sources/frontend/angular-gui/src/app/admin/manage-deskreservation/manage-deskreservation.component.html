@@ -18,6 +18,7 @@
                     <th scope="col">{{ 'reservationEditorPage.fullname' | translate }}</th>
                     <th scope="col">{{ 'reservationEditorPage.email' | translate }}</th>
                     <th scope="col">{{ 'reservationEditorPage.phonenumber' | translate }}</th>
+                    <th scope="col">{{ 'reservationEditorPage.reservationIdentifier' | translate }}</th>
                     <th scope="col" colspan="2">{{ 'reservationEditorPage.actions' | translate }}</th>
                   </tr>
                 </thead>
@@ -30,6 +31,7 @@
                         <td class="text-nowrap">{{reservation.lastname}} {{reservation.firstname}}</td>
                         <td class="text-nowrap">{{reservation.email}}</td>
                         <td class="text-nowrap">{{reservation.telephone}}</td>
+                        <td class="text-nowrap">{{reservation.reservationIdentifier}}</td>
                         <td>
                             <a class="btn btn-primary" routerLink="/deskreservation-editor" [queryParams]="{ id:reservation.id , desknumber: reservation.deskNumber, editor: true }" queryParamsHandling="merge" routerLinkActive="active" role="button" title="{{ 'reservationEditorPage.editorButtonLabel' | translate }}">{{ 'reservationEditorPage.editorButton' | translate }}</a>
                         </td>

@@ -40,6 +40,9 @@ public class DeskReservation {
 	
 	@Column(name = "telefon")
 	private String telephone;
+	
+	@Column(name = "foglalas_azonosito", nullable = false)
+	private String reservationIdentifier;
 
 	public Long getId() {
 		return id;
@@ -103,6 +106,14 @@ public class DeskReservation {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public String getReservationIdentifier() {
+		return reservationIdentifier;
+	}
+
+	public void setReservationIdentifier(String reservationIdentifier) {
+		this.reservationIdentifier = reservationIdentifier;
 	}
 	
 }

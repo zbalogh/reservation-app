@@ -16,6 +16,7 @@
             <h1 class="display-5">{{ 'reservationEditorPage.editReservation' | translate }}</h1>
 			<p class="lead">{{ 'reservationEditorPage.editorDescription' | translate }}</p>
             <h3 class="display-6">{{ 'reservationPage.selectedDesk' | translate }}: #{{desknumber}}</h3>
+            <h5 class="display-6">{{ 'reservationEditorPage.reservationIdentifier' | translate }}: {{deskReservation.reservationIdentifier}}</h5>
             <br>
             <a class="btn btn-primary" routerLink="/admin/settings" routerLinkActive="active" role="button">{{ 'reservationPage.backToDeskList' | translate }}</a>
         </div>

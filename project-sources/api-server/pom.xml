@@ -4,7 +4,7 @@
 
     <groupId>com.zbalogh.reservation.apiserver</groupId>
     <artifactId>reservation-api-server</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <name>reservation-api-server</name>
 	<description>Reservation App with Spring Boot</description>
 	
@@ -91,6 +91,12 @@
 		    <groupId>com.google.guava</groupId>
 		    <artifactId>guava</artifactId>
 		    <version>28.1-jre</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.12.0</version>
 		</dependency>
 
 

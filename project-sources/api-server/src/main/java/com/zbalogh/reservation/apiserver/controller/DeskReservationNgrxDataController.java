@@ -79,6 +79,13 @@ public class DeskReservationNgrxDataController
 	{
 		boolean isUpdate = false;
 		
+		//
+		// First of all, we need to check the following things:
+		//
+		// - ADD: We check if we have already another existing reservation for the same desk.
+		//
+		// - UPDATE: If we are updating an existing reservation, we check if the administrator user is logged in. 
+		//
 		if (entity.getId() == null || entity.getId() <= 0) {
 			isUpdate = false;
 			// ID is null or zero, so it's a creation request to insert new item into the database.
@@ -103,6 +110,9 @@ public class DeskReservationNgrxDataController
 			}
 		}
 		
+		//
+		// Validate the data
+		//
 		try {
 			validate(entity, isUpdate);
 		}
@@ -112,6 +122,19 @@ public class DeskReservationNgrxDataController
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		
+		//
+		// if we add a new reservation then we generate reservation identifier
+		//
+		if (!isUpdate) {
+			// generate reservation identifier and set it to the new reservation entity
+			String reservationId = service.generateReservationIdentifier();
+			entity.setReservationIdentifier(reservationId);
+		}
+		
+		//
+		// All things are done and the entity is ready to be saved
+		// Saving the entity
+		//
 		entity = service.save(entity);
 		
 		return new ResponseEntity<>(entity, HttpStatus.OK);
@@ -204,6 +227,10 @@ public class DeskReservationNgrxDataController
 		Assert.hasText(entity.getTelephone(), "Telephone must not be empty.");
 		
 		Assert.isTrue(entity.getStatus() != null && entity.getStatus() > 0, "Status field is invalid.");
+		
+		if (isUpdate) {
+			Assert.hasText(entity.getReservationIdentifier(), "Reservation identifier must not be empty.");
+		}
 	}
 
 }

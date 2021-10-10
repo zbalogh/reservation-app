@@ -43,6 +43,7 @@
 		"firstname": "Keresztnév",
 		"email": "Email",
 		"phonenumber": "Telefonszám",
+		"reservationIdentifier": "A foglalásod azonosítója: ",
 		"acceptTerms": "Elfogadom a feltételeket.",
 		"reserveButton": "Foglalás"
 	},
@@ -54,6 +55,7 @@
 		"time": "Időpont",
 		"email": "Email",
 		"phonenumber": "Telefonszám",
+		"reservationIdentifier": "Foglalás azonosító",
 		"fullname": "Név",
 		"actions": "Műveletek",
 		"editorButtonLabel": "Kattints ide, ha módosítani szeretnéd ezt a foglalást!",
