@@ -35,3 +35,6 @@ apiServerImage: zbalogh/reservation-api-server
 authServerImage: zbalogh/reservation-dotnet-auth-server
 
 alldeskNumber: "200"
+
+# The supported Ingress Controller types: "gke", "istio", "nginx"
+ingressControllerType: nginx

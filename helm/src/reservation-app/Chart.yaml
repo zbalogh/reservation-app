@@ -1,5 +1,5 @@
 apiVersion: v2
-name: reservation-app-gke-ingress
+name: reservation-app
 description: A Helm chart for Reservation App on Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.

@@ -117,15 +117,15 @@ kubectl label namespace default istio-injection=enabled
 
 Helm example: https://github.com/technosophos/tscharts
 
-
+--------------------------------------
 How to Create Helm package:
 ---------------------------
 
 cd helm/src
 
-helm create reservation-app-gke-ingress
+helm create reservation-app
 
-helm package reservation-app-gke-ingress
+helm package reservation-app
 
 # copy tar.gz file into docs/helm-charts directory
 
@@ -135,27 +135,36 @@ helm repo index docs/helm-charts --url https://zbalogh.github.io/reservation-app
 
 
 
+--------------------------------------
 Install application from Helm package:
 --------------------------------------
 
-https://artifacthub.io/packages/helm/reservation-app/reservation-app-gke-ingress
+https://artifacthub.io/packages/helm/reservation-app/reservation-app
 
 
 # add the repository to the helm repo sources
 helm repo add reservation-app https://zbalogh.github.io/reservation-app/helm-charts
 
 # install with default replicas=1
-helm install reservation reservation-app/reservation-app-gke-ingress
+helm install reservation reservation-app/reservation-app
 
 # install with replicas=2 (override the default values by the "--set" keyword)
-helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2
+helm install reservation reservation-app/reservation-app --set webguiReplicas=2 --set apiServerReplicas=2
 
 # install with replicas=2 and alldeskNumber=40 (override the default values by the "--set" keyword)
-helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2 --set alldeskNumber=40
+helm install reservation reservation-app/reservation-app --set webguiReplicas=2 --set apiServerReplicas=2 --set alldeskNumber=40
 
 # install with replicas=2, alldeskNumber=40, and set the passwords (override the default values by the "--set" keyword)
-helm install reservation reservation-app/reservation-app-gke-ingress --set webguiReplicas=2 --set apiServerReplicas=2 --set authServerReplicas=2 --set databasePassword=dbadmin123 --set adminUserPassword=pwd123 --set alldeskNumber=40
+helm install reservation reservation-app/reservation-app --set webguiReplicas=2 --set apiServerReplicas=2 --set authServerReplicas=2 --set databasePassword=dbadmin123 --set adminUserPassword=pwd123 --set alldeskNumber=40
 
 #install with alldeskNumber=40, and set the passwords (override the default values by the "--set" keyword)
-helm install reservation reservation-app/reservation-app-gke-ingress --set databasePassword=dbadmin123 --set adminUserPassword=pwd123 --set alldeskNumber=40
+helm install reservation reservation-app/reservation-app --set databasePassword=dbadmin123 --set adminUserPassword=pwd123 --set alldeskNumber=40
 
+# install with GKE Ingress Controller
+helm install reservation reservation-app/reservation-app --set ingressControllerType=gke
+
+# install with ISTIO Ingress Gateway
+helm install reservation reservation-app/reservation-app --set ingressControllerType=istio
+
+# install with NGINX Ingress Controller (Default)
+helm install reservation reservation-app/reservation-app --set ingressControllerType=nginx

@@ -1,36 +1,14 @@
 apiVersion: v1
 entries:
-  reservation-app-gke-ingress:
+  reservation-app:
   - apiVersion: v2
     appVersion: 1.0.4
-    created: "2021-10-10T13:57:34.124507+02:00"
+    created: "2021-10-21T10:32:23.6276565+02:00"
     description: A Helm chart for Reservation App on Kubernetes
-    digest: a3e9b5732738bc1e824cdb3048a7dfd9c63254d2fa9342252f6c73ed7d82aa05
-    name: reservation-app-gke-ingress
+    digest: 93c81965b3b2756400d5858ae36a2b96f8ad3d489e2d22793430eb515cca3715
+    name: reservation-app
     type: application
     urls:
-    - https://zbalogh.github.io/reservation-app/helm-charts/reservation-app-gke-ingress-1.0.4.tgz
+    - https://zbalogh.github.io/reservation-app/helm-charts/reservation-app-1.0.4.tgz
     version: 1.0.4
-  reservation-app-gke-istio:
-  - apiVersion: v2
-    appVersion: 1.0.4
-    created: "2021-10-10T13:57:34.1284125+02:00"
-    description: A Helm chart for Reservation App on Kubernetes
-    digest: 4ba4f4e98303509a0c6dcc003ce4c3307c9ae43081a36a9c863accef4a4740b2
-    name: reservation-app-gke-istio
-    type: application
-    urls:
-    - https://zbalogh.github.io/reservation-app/helm-charts/reservation-app-gke-istio-1.0.4.tgz
-    version: 1.0.4
-  reservation-app-nginx-ingress:
-  - apiVersion: v2
-    appVersion: 1.0.4
-    created: "2021-10-10T13:57:34.1303673+02:00"
-    description: A Helm chart for Reservation App on Kubernetes
-    digest: 2ebb65ed864ab7b37dfc15c8e31b791e70ef96dbd4467f5737cffb10cd0d995c
-    name: reservation-app-nginx-ingress
-    type: application
-    urls:
-    - https://zbalogh.github.io/reservation-app/helm-charts/reservation-app-nginx-ingress-1.0.4.tgz
-    version: 1.0.4
-generated: "2021-10-10T13:57:34.1215762+02:00"
+generated: "2021-10-21T10:32:23.6266283+02:00"

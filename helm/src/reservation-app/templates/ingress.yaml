@@ -1,0 +1,132 @@
+{{- if eq .Values.ingressControllerType "nginx" -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+
+metadata:
+  name: {{ .Release.Name }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/data/.*
+        backend:
+          serviceName: {{ .Values.apiServiceName }}
+          servicePort: 8080
+
+      - path: /api/auth/.*
+        backend:
+          serviceName: {{ .Values.authServiceName }}
+          servicePort: 5000
+
+      - path: /web-gui/angular-gui/.*
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /web-gui/angular-gui
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+{{- else if eq .Values.ingressControllerType "gke" -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+
+metadata:
+  name: {{ .Release.Name }}-ingress
+
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /web-gui/angular-gui/*
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /web-gui/angular-gui
+        backend:
+          serviceName: {{ .Values.webguiServiceName }}
+          servicePort: 80
+
+      - path: /api/data/*
+        backend:
+          serviceName: {{ .Values.apiServiceName }}
+          servicePort: 8080
+
+      - path: /api/auth/*
+        backend:
+          serviceName: {{ .Values.authServiceName }}
+          servicePort: 5000
+{{- else if eq .Values.ingressControllerType "istio" -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Release.Name }}-istio-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}-virtual-service
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - {{ .Release.Name }}-istio-gateway
+  http:
+    - match:
+        - uri:
+            exact: /
+      route:
+        - destination:
+            host: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
+    - match:
+        - uri:
+            prefix: /web-gui/angular-gui
+      route:
+        - destination:
+            host: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
+    - match:
+        - uri:
+            prefix: /api/data
+      route:
+        - destination:
+            host: {{ .Values.apiServiceName }}
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /api/auth
+      route:
+        - destination:
+            host: {{ .Values.authServiceName }}
+            port:
+              number: 5000
+{{- end }}

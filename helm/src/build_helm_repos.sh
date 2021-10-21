@@ -17,11 +17,7 @@ echo "BASE_DIR: $BASE_DIR"
 #
 # create Helm packages
 #
-helm package reservation-app-gke-ingress
-
-helm package reservation-app-gke-istio
-
-helm package reservation-app-nginx-ingress
+helm package reservation-app
 
 
 #
