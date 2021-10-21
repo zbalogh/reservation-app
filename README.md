@@ -32,11 +32,9 @@ helm install reservation reservation-app/reservation-app --set ingressController
 
 ```
 helm install reservation reservation-app/reservation-app --set ingressControllerType=nginx
-```
 
 OR
 
-```
 helm install reservation reservation-app/reservation-app
 ```
 
