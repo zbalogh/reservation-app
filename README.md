@@ -17,21 +17,27 @@ helm repo add reservation-app https://zbalogh.github.io/reservation-app/helm-cha
 2. Install GKE Ingress based package with default values
 
 ```
-helm install reservation reservation-app/reservation-app-gke-ingress
+helm install reservation reservation-app/reservation-app --set ingressControllerType=gke
 ```
 
 
-3. Install GKE Istio based package with default values
+3. Install ISTIO based package with default values
 
 ```
-helm install reservation reservation-app/reservation-app-gke-istio
+helm install reservation reservation-app/reservation-app --set ingressControllerType=istio
 ```
 
 
 4. Install NGINX Ingress based package with default values
 
 ```
-helm install reservation reservation-app/reservation-app-nginx-ingress
+helm install reservation reservation-app/reservation-app --set ingressControllerType=nginx
+```
+
+OR
+
+```
+helm install reservation reservation-app/reservation-app
 ```
 
 
