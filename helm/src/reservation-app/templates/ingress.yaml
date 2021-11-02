@@ -129,4 +129,46 @@ spec:
             host: {{ .Values.authServiceName }}
             port:
               number: 5000
+{{- else if eq .Values.ingressControllerType "aks" -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/data
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.apiServiceName }}
+            port: 
+              number: 8080
+
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.authServiceName }}
+            port:
+              number: 5000
+
+      - path: /web-gui/angular-gui
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
+
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
 {{- end }}
