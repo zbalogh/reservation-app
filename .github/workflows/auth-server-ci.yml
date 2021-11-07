@@ -1,0 +1,31 @@
+name: auth-server NET Core Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./project-sources/dotnet/ReservationAuthServer
+
+    steps:
+    - name: Checkout auth-server code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Publish
+      run: dotnet publish -c Release -o out/Release/publish
