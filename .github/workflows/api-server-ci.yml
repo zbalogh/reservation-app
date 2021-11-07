@@ -36,6 +36,6 @@ jobs:
         tags: latest
         registry: docker.io
         directory: project-sources/api-server
-        dockerfile: Dockerfile
+        dockerfile: project-sources/api-server/Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
