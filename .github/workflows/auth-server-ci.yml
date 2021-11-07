@@ -29,3 +29,14 @@ jobs:
 
     - name: Publish
       run: dotnet publish -c Release -o out/Release/publish
+
+    - name: Docker Build and Push
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        image: zbalogh/reservation-dotnet-auth-server
+        tags: latest
+        registry: docker.io
+        directory: project-sources/dotnet/ReservationAuthServer
+        dockerfile: project-sources/dotnet/ReservationAuthServer/Dockerfile
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
