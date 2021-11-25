@@ -71,7 +71,8 @@ public class JwtRequestFilter extends OncePerRequestFilter
 				if (username != null && authentication == null)
 				{
 					// validate JWT token
-					if ( jwtUtil.validateToken(jwt) && checkUserExistsOnAuthServer(username) )
+					//if ( jwtUtil.validateToken(jwt) && checkUserExistsOnAuthServer(username) )
+					if (jwtUtil.validateToken(jwt))
 					{
 						// token is valid
 						// create UserDetails object for the given user name
@@ -126,6 +127,7 @@ public class JwtRequestFilter extends OncePerRequestFilter
 	 * @param username
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private boolean checkUserExistsOnAuthServer(String username)
 	{
 		boolean userExists = false;
