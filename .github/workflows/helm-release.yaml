@@ -1,5 +1,7 @@
 name: Relese Helm Charts
 
+on: workflow_dispatch
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -21,7 +23,7 @@ jobs:
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.2.1
-         with:
+        with:
           charts_dir: helm/src/reservation-app
           charts_repo_url: https://zbalogh.github.io/reservation-app/helm-charts
         env:
