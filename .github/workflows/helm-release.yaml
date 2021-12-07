@@ -20,6 +20,6 @@ jobs:
         uses: helm/chart-releaser-action@v1.2.1
         with:
           charts_dir: helm/src
-          charts_repo_url: https://zbalogh.github.io/reservation-app/helm-charts
+          charts_repo_url: https://zbalogh.github.io/reservation-app
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
