@@ -143,7 +143,7 @@ https://artifacthub.io/packages/helm/reservation-app/reservation-app
 
 
 # add the repository to the helm repo sources
-helm repo add reservation-app https://zbalogh.github.io/reservation-app/helm-charts
+helm repo add reservation-app https://zbalogh.github.io/reservation-app
 
 # install with default replicas=1
 helm install reservation reservation-app/reservation-app
