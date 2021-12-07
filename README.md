@@ -10,7 +10,7 @@ Desk reservation application based on Angular, Java, .NET Core technologies as w
 1. Add the repository to the helm repo sources
 
 ```
-helm repo add reservation-app https://zbalogh.github.io/reservation-app/helm-charts
+helm repo add reservation-app https://zbalogh.github.io/reservation-app
 ```
 
 
