@@ -21,25 +21,25 @@ helm package reservation-app
 
 
 #
-# delete previous packages in the docs/helm-charts repository folder
+# delete the temporary folder
 #
-rm -f ../../docs/helm-charts/*.tgz
+rm -f ../tmp/reservation-demo/helm-charts
 
 
 #
-# delete the previous index.yaml file
+# create an empty temporary folder
 #
-rm -f ../../docs/helm-charts/index.yaml
+mkdir -p ../tmp/reservation-demo/helm-charts
 
 
 #
 # move the package files into the docs/helm-charts repository folder
 #
-mv *.tgz ../../docs/helm-charts
+mv *.tgz ../tmp/reservation-demo/helm-charts
 
 
 #
 # re-build the repository index
 #
-helm repo index ../../docs/helm-charts --url https://zbalogh.github.io/reservation-app/helm-charts
+helm repo index ../tmp/reservation-demo/helm-charts --url https://zbalogh.github.io/reservation-app
 
