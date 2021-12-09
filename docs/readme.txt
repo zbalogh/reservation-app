@@ -117,7 +117,7 @@ kubectl label namespace default istio-injection=enabled
 
 Helm example: https://github.com/technosophos/tscharts
 
---------------------------------------
+---------------------------
 How to Create Helm package:
 ---------------------------
 
@@ -127,11 +127,11 @@ helm create reservation-app
 
 helm package reservation-app
 
-# copy tar.gz file into docs/helm-charts directory
+mkdir -p ../tmp/reservation-demo/helm-charts
 
-cd ../..
+mv *.tgz ../tmp/reservation-demo/helm-charts
 
-helm repo index docs/helm-charts --url https://zbalogh.github.io/reservation-app/helm-charts
+helm repo index ../tmp/reservation-demo/helm-charts --url https://zbalogh.github.io/reservation-app
 
 
 
