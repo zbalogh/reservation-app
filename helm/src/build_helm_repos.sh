@@ -23,7 +23,7 @@ helm package reservation-app
 #
 # delete the temporary folder
 #
-rm -f ../tmp/reservation-demo/helm-charts
+rm -rf ../tmp/reservation-demo/helm-charts
 
 
 #

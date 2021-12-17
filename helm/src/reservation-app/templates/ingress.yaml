@@ -1,5 +1,5 @@
 {{- if eq .Values.ingressControllerType "nginx" -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 
 metadata:
@@ -13,31 +13,46 @@ spec:
   - http:
       paths:
       - path: /api/data/.*
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.apiServiceName }}
-          servicePort: 8080
+          service:
+            name: {{ .Values.apiServiceName }}
+            port: 
+              number: 8080
 
       - path: /api/auth/.*
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.authServiceName }}
-          servicePort: 5000
+          service:
+            name: {{ .Values.authServiceName }}
+            port:
+              number: 5000
 
       - path: /web-gui/angular-gui/.*
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.webguiServiceName }}
-          servicePort: 80
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
 
       - path: /web-gui/angular-gui
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.webguiServiceName }}
-          servicePort: 80
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
 
-      - path: /
+      - path: /.*
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.webguiServiceName }}
-          servicePort: 80
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
 {{- else if eq .Values.ingressControllerType "gke" -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 
 metadata:
@@ -47,30 +62,45 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
-        backend:
-          serviceName: {{ .Values.webguiServiceName }}
-          servicePort: 80
-
-      - path: /web-gui/angular-gui/*
-        backend:
-          serviceName: {{ .Values.webguiServiceName }}
-          servicePort: 80
-
-      - path: /web-gui/angular-gui
-        backend:
-          serviceName: {{ .Values.webguiServiceName }}
-          servicePort: 80
-
       - path: /api/data/*
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.apiServiceName }}
-          servicePort: 8080
+          service:
+            name: {{ .Values.apiServiceName }}
+            port: 
+              number: 8080
 
       - path: /api/auth/*
+        pathType: Prefix
         backend:
-          serviceName: {{ .Values.authServiceName }}
-          servicePort: 5000
+          service:
+            name: {{ .Values.authServiceName }}
+            port:
+              number: 5000
+
+      - path: /web-gui/angular-gui/*
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
+
+      - path: /web-gui/angular-gui
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
+
+       - path: /*
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.webguiServiceName }}
+            port:
+              number: 80
 {{- else if eq .Values.ingressControllerType "istio" -}}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
