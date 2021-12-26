@@ -25,14 +25,14 @@ spec:
         spec:
             containers:
             - name: angular-ui
-              image: {{ .Values.webguiImage }}:latest
+              image: {{ .Values.webguiImage }}:{{ .Chart.AppVersion }}
               imagePullPolicy: Always
               readinessProbe:
                   httpGet:
                     path: /health.html
-                    port: 80
+                    port: 8050
                   initialDelaySeconds: 15
                   periodSeconds: 30
               ports:
-                - containerPort: 80
+                - containerPort: 8050
             restartPolicy: Always

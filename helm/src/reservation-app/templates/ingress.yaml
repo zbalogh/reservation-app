@@ -34,7 +34,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 
       - path: /web-gui/angular-gui
         pathType: Prefix
@@ -42,7 +42,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 
       - path: /.*
         pathType: Prefix
@@ -50,7 +50,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 {{- else if eq .Values.ingressControllerType "gke" -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -84,7 +84,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 
       - path: /web-gui/angular-gui
         pathType: Prefix
@@ -92,7 +92,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 
        - path: /*
         pathType: Prefix
@@ -100,7 +100,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 {{- else if eq .Values.ingressControllerType "istio" -}}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -134,7 +134,7 @@ spec:
         - destination:
             host: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
     - match:
         - uri:
             prefix: /web-gui/angular-gui
@@ -142,7 +142,7 @@ spec:
         - destination:
             host: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
     - match:
         - uri:
             prefix: /api/data
@@ -192,7 +192,7 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 
       - path: /
         pathType: Exact
@@ -200,5 +200,5 @@ spec:
           service:
             name: {{ .Values.webguiServiceName }}
             port:
-              number: 80
+              number: 8050
 {{- end }}

@@ -4,7 +4,7 @@ services:
   angular-ui:
     image: zbalogh/reservation-angular-ui:latest
     ports:
-      - "80:80"
+      - "8050:8050"
     restart: always
     networks:
       - zbalogh-reservation-network

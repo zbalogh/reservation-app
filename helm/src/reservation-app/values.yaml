@@ -4,7 +4,7 @@
 
 databaseName: zbaloghspringdemo
 
-databaseServiceName: postgres-cluster-ip-service
+databaseServiceName: postgres-server
 
 databasePort: "5432"
 
@@ -16,7 +16,7 @@ databasePassword: 123dbsecret
 # default admin user password. It can be overriden by CLI parameter.
 adminUserPassword: adm1w4K6B8
 
-webguiServiceName: webgui-cluster-ip-service
+webguiServiceName: webgui-server
 
 apiServiceName: api-server
 

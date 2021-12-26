@@ -8,4 +8,4 @@ COPY docker/start.html /usr/share/nginx/html/index.html
 
 COPY dist/angular-gui /usr/share/nginx/html/web-gui/angular-gui
 
-EXPOSE 80
+EXPOSE 8050
