@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  angular-ui:
+  webgui-server:
     image: zbalogh/reservation-angular-ui:latest
     ports:
       - "8050:8050"
@@ -15,9 +15,9 @@ services:
       - "8080:8080"
     restart: always
     depends_on:
-      - "database-server"
+      - "postgres-server"
     environment:
-      DB_HOSTNAME: database-server
+      DB_HOSTNAME: postgres-server
       DB_PORT: 5432
       DB_NAME: zbaloghspringdemo
       DB_USERNAME: postgres
@@ -33,11 +33,11 @@ services:
       - "5002:5002"
     restart: always
     depends_on:
-      - "database-server"
+      - "postgres-server"
     networks:
       - zbalogh-reservation-network
 
-  database-server:
+  postgres-server:
     image: postgres:9.6
     ports:
       - "5432:5432"
