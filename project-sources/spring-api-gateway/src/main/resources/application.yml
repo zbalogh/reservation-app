@@ -1,0 +1,35 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: reservation-api-gateway
+
+  cloud:
+    gateway:
+      routes:
+      - id: api-server-route
+        uri: http://api-server:8080/
+        predicates:
+        - Path=/api/data/**
+      
+      - id: auth-server-route
+        uri: http://auth-server:5000/
+        predicates:
+        - Path=/api/auth/**
+      
+      - id: webgui-server-route-1
+        uri: http://webgui-server:8050/
+        predicates:
+        - Path=/web-gui/angular-gui/**
+      
+      - id: webgui-server-route-2
+        uri: http://webgui-server:8050/
+        predicates:
+        - Path=/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
