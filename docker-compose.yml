@@ -1,6 +1,14 @@
 version: '3.7'
 
 services:
+  spring-api-gateway:
+    image: zbalogh/reservation-spring-api-gateway:latest
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - zbalogh-reservation-network
+
   webgui-server:
     image: zbalogh/reservation-angular-ui:latest
     ports:
