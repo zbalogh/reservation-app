@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ShowReservationComponent } from './show-reservation/show-reservation.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,12 @@ const routes: Routes = [
   {
     path: 'deskreservation',
     component: DeskreservationComponent
+  },
+
+  // show desk reservation by the identifier
+  {
+    path: 'show-reservation',
+    component: ShowReservationComponent
   },
 
   // desk reservation form

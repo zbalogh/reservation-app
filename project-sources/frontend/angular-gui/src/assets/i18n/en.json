@@ -13,12 +13,14 @@
 	"homePage" : {
 		"title": "Desk Reservation",
 		"button": "Desk Reservation",
+		"showReservationButton": "My Reservations",
 		"guide" : {
 			"part1" : "Guide to the online booking",
 			"part2" : "Click the DESK RESERVATION button.",
 			"part3" : "Search for the desk number in the list and click on the FREE button. If it is already reserved, please look for another.",
 			"part4" : "On the next page fill out the form and click on the RESERVATION button after accepting the terms."
-		}
+		},
+		"showReservationGuide": "Click the 'My Reservations' button if you want to view your reservations."
 	},
 
 	"reservationPage" : {
@@ -69,6 +71,19 @@
 		"editReservation": "Edit Reservation",
 		"editorDescription": "You can modify here the selected reservation.",
 		"saveButton": "Save"
+	},
+
+	"showReservationPage" : {
+		"title": "View Reservation",
+		"description": "Here you can see the details of your desk reservation.",
+		"reservationIdentifier": "Reservation Identifier",
+		"desknumber": "Desk Number",
+		"enterReservationIdentifier": "Please enter your reservation identifier.",
+		"showButton": "View Reservation",
+		"reservationNotFound": "No reservation found with the given identifier.",
+		"cancelReservationFailed": "Failed to cancel the reservation.",
+		"cancelReservationSuccess" : "Your reservation has been sucessfully cancelled!",
+		"cancelReservationButton" : "Cancel Reservation"
 	},
 
 	"loginPage" : {

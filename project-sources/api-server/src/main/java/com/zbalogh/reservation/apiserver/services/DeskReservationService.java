@@ -53,6 +53,20 @@ public class DeskReservationService {
 		return optional.isPresent() ? optional.get() : null;
 	}
 	
+	public DeskReservation findByReservationIdentifier(String reservationIdentifier)
+	{
+		Optional<DeskReservation> optional = repository.findByReservationIdentifier(reservationIdentifier);
+		
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
+	public DeskReservation findByReservationIdentifierAndEmail(String reservationIdentifier, String email)
+	{
+		Optional<DeskReservation> optional = repository.findByReservationIdentifierAndEmail(reservationIdentifier, email);
+		
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
 	public int getAlldeskNumber()
 	{
 		// set the list size from the default value
@@ -110,6 +124,11 @@ public class DeskReservationService {
 	public void deleteById(Long id)
 	{
 		repository.deleteById(id);
+	}
+	
+	public void deleteByReservationIdentifier(String reservationIdentifier)
+	{
+		repository.deleteByReservationIdentifier(reservationIdentifier);
 	}
 	
 	public String generateReservationIdentifier()

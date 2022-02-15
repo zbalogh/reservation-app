@@ -32,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ShowReservationComponent } from './show-reservation/show-reservation.component';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -49,7 +50,8 @@ export function createTranslateLoader(http: HttpClient) {
     DeskreservationFormComponent,
     ManageDeskreservationComponent,
     DeskreservationEditorComponent,
-    LoginComponent
+    LoginComponent,
+    ShowReservationComponent
   ],
   imports: [
     BrowserModule,

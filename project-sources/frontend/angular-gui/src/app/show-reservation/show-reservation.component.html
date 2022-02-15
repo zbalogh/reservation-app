@@ -1,0 +1,101 @@
+<div align="center">
+
+    <div *ngIf="errorMessage">
+        <h3 class="display-6 text-danger">{{errorMessage}}</h3>
+        <br>
+    </div>
+
+
+    <div *ngIf="!cancelled && !deskReservation">
+        <div class="jumbotron">
+            <h1 class="display-5">{{ 'showReservationPage.title' | translate }}</h1>
+			<span class="lead">{{ 'showReservationPage.description' | translate }}</span>
+        </div>
+
+        <p class="lead">{{ 'showReservationPage.enterReservationIdentifier' | translate }}</p>
+
+        <div class="col-sm-12">
+            <form (ngSubmit)="onSubmitReservationIdentifierForm(reservationIdentifierForm)" #reservationIdentifierForm="ngForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                    
+                    <input type="text" class="form-control" id="inputReservationIdentifier" name="inputReservationIdentifier"
+                        placeholder="{{ 'showReservationPage.reservationIdentifier' | translate }}"
+                        required
+                        [(ngModel)]="reservationIdentifier">
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        <button type="submit" class="btn btn-primary" [disabled]="!reservationIdentifierForm.form.valid">{{ 'showReservationPage.showButton' | translate }}</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div *ngIf="!cancelled && deskReservation">
+        <div class="jumbotron">
+            <h1 class="display-5">{{ 'showReservationPage.title' | translate }}</h1>
+			<p class="lead">{{ 'showReservationPage.description' | translate }}</p>
+            <h3 class="display-6">{{ 'showReservationPage.desknumber' | translate }}: #{{deskReservation.deskNumber}}</h3>
+            <h5 class="display-6">{{ 'showReservationPage.reservationIdentifier' | translate }}: {{deskReservation.reservationIdentifier}}</h5>
+        </div>
+
+        <div class="col-sm-12">
+            <form #reservationDetailsForm="ngForm">
+            
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                <label for="inputLastName">{{ 'reservationPage.lastname' | translate }}</label>
+                <input readonly type="text" class="form-control" id="inputLastName" name="inputLastName"
+                    placeholder="{{ 'reservationPage.lastname' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.lastname">
+                </div>
+                
+                <div class="form-group col-md-6">
+                <label for="inputFirstName">{{ 'reservationPage.firstname' | translate }}</label>
+                <input readonly type="text" class="form-control" id="inputFirstName" name="inputFirstName"
+                    placeholder="{{ 'reservationPage.firstname' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.firstname">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                <label for="inputEmail">{{ 'reservationPage.email' | translate }}</label>
+                <input readonly type="email" class="form-control" id="inputEmail"name="inputEmail"
+                    placeholder="{{ 'reservationPage.email' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.email">
+                </div>
+                
+                <div class="form-group col-md-6">
+                <label for="inputTelephoneNumber">{{ 'reservationPage.phonenumber' | translate }}</label>
+                <input readonly type="text" class="form-control" id="inputTelephoneNumber" name="inputTelephoneNumber"
+                    placeholder="{{ 'reservationPage.phonenumber' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.telephone">
+                </div>
+            </div>
+
+            <button type="button" (click)="onCancelReservation()" class="btn btn-danger">{{ 'showReservationPage.cancelReservationButton' | translate }}</button>
+
+            </form>
+            <br>
+        </div>
+    </div>
+
+
+    <div *ngIf="cancelled && deskReservation">
+        <div class="jumbotron">
+            <h2 class="display-5 text-success">{{ 'showReservationPage.cancelReservationSuccess' | translate }}</h2>
+            <h3 class="display-6">{{ 'showReservationPage.desknumber' | translate }}: #{{deskReservation.deskNumber}}</h3>
+            <h5 class="display-6">{{ 'showReservationPage.reservationIdentifier' | translate }}: {{deskReservation.reservationIdentifier}}</h5>
+        </div>
+    </div>
+
+</div>

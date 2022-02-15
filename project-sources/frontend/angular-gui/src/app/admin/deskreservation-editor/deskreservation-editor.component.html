@@ -1,7 +1,7 @@
 <div align="center">
 
     <div *ngIf="submitted">
-        <h1 class="display-5">{{ 'reservationEditorPage.saveSuccess' | translate }}</h1>
+        <h2 class="display-5 text-success">{{ 'reservationEditorPage.saveSuccess' | translate }}</h2>
         <br>
         <h3 class="display-6">{{ 'reservationPage.selectedDesk' | translate }}: #{{desknumber}}</h3>
         <br>
@@ -22,47 +22,47 @@
         </div>
 
         <div class="col-sm-12">
-        <form (ngSubmit)="onSubmit(reservationForm)" #reservationForm="ngForm">
-        
-        <div class="form-row">
-            <div class="form-group col-md-6">
-            <label for="inputLastName">{{ 'reservationPage.lastname' | translate }}</label>
-            <input type="text" class="form-control" id="inputLastName" name="inputLastName"
-                placeholder="{{ 'reservationPage.lastname' | translate }}"
-                required
-                [(ngModel)]="deskReservation.lastname">
+            <form (ngSubmit)="onSubmit(reservationForm)" #reservationForm="ngForm">
+            
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                <label for="inputLastName">{{ 'reservationPage.lastname' | translate }}</label>
+                <input type="text" class="form-control" id="inputLastName" name="inputLastName"
+                    placeholder="{{ 'reservationPage.lastname' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.lastname">
+                </div>
+                
+                <div class="form-group col-md-6">
+                <label for="inputFirstName">{{ 'reservationPage.firstname' | translate }}</label>
+                <input type="text" class="form-control" id="inputFirstName" name="inputFirstName"
+                    placeholder="{{ 'reservationPage.firstname' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.firstname">
+                </div>
             </div>
             
-            <div class="form-group col-md-6">
-            <label for="inputFirstName">{{ 'reservationPage.firstname' | translate }}</label>
-            <input type="text" class="form-control" id="inputFirstName" name="inputFirstName"
-                placeholder="{{ 'reservationPage.firstname' | translate }}"
-                required
-                [(ngModel)]="deskReservation.firstname">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                <label for="inputEmail">{{ 'reservationPage.email' | translate }}</label>
+                <input type="email" class="form-control" id="inputEmail"name="inputEmail"
+                    placeholder="{{ 'reservationPage.email' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.email">
+                </div>
+                
+                <div class="form-group col-md-6">
+                <label for="inputTelephoneNumber">{{ 'reservationPage.phonenumber' | translate }}</label>
+                <input type="text" class="form-control" id="inputTelephoneNumber" name="inputTelephoneNumber"
+                    placeholder="{{ 'reservationPage.phonenumber' | translate }}"
+                    required
+                    [(ngModel)]="deskReservation.telephone">
+                </div>
             </div>
-        </div>
-        
-        <div class="form-row">
-            <div class="form-group col-md-6">
-            <label for="inputEmail">{{ 'reservationPage.email' | translate }}</label>
-            <input type="email" class="form-control" id="inputEmail"name="inputEmail"
-                placeholder="{{ 'reservationPage.email' | translate }}"
-                required
-                [(ngModel)]="deskReservation.email">
-            </div>
-            
-            <div class="form-group col-md-6">
-            <label for="inputTelephoneNumber">{{ 'reservationPage.phonenumber' | translate }}</label>
-            <input type="text" class="form-control" id="inputTelephoneNumber" name="inputTelephoneNumber"
-                placeholder="{{ 'reservationPage.phonenumber' | translate }}"
-                required
-                [(ngModel)]="deskReservation.telephone">
-            </div>
-        </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="!reservationForm.form.valid">{{ 'reservationEditorPage.saveButton' | translate }}</button>
-        </form>
-        <br>
+            <button type="submit" class="btn btn-primary" [disabled]="!reservationForm.form.valid">{{ 'reservationEditorPage.saveButton' | translate }}</button>
+            </form>
+            <br>
         </div>
 
     </div>

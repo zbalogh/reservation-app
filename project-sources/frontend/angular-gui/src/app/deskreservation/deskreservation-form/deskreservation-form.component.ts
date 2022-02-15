@@ -48,7 +48,7 @@ export class DeskreservationFormComponent implements OnInit {
         // get the translated labels/messages
         this.translate.get('reservationPage.reservationfailed').subscribe( str => {
           this.reservationfailedMsg = str;
-      });
+        });
   }
 
   ngOnInit() {

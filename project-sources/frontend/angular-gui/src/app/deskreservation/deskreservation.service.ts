@@ -29,4 +29,14 @@ export class DeskReservationService {
     return this.http.delete(getBaseWebURL() + '/api/data/deskreservation/' + id);
   }
 
+  getReservationByIdentifier(identifier: string) : Observable<DeskReservation>
+  {
+    return this.http.get<DeskReservation>(getBaseWebURL() + '/api/data/deskreservation/identifier/' + identifier);
+  }
+
+  deleteReservationByIdentifier(identifier: string)
+  {
+    return this.http.delete(getBaseWebURL() + '/api/data/deskreservation/identifier/' + identifier);
+  }
+
 }

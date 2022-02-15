@@ -68,10 +68,60 @@ public class DeskReservationNgrxDataController
 		DeskReservation entity = service.findById(id);
 		
 		if (entity == null) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return new ResponseEntity<>(entity, HttpStatus.OK);
+	}
+	
+	/**
+	 * Retrieve the desk reservation details with the given reservation identifier.
+	 * The reservation identifier is generated during the reservation process.
+	 * The user is allowed to get details for his own reservation by using the reservation identifier.
+	 * 
+	 * @param reservationIdentifier
+	 * @param request
+	 * @param response
+	 * 
+	 * @return DeskReservation
+	 */
+	@RequestMapping(value = "/deskreservation/identifier/{reservationIdentifier}", method = RequestMethod.GET)
+	public ResponseEntity<DeskReservation> getDeskReservationDetailsByIdentifier(@PathVariable String reservationIdentifier, HttpServletRequest request, HttpServletResponse response)
+	{
+		// get the desk reservation by identifier
+		DeskReservation entity = service.findByReservationIdentifier(reservationIdentifier);
+		
+		if (entity == null) {
+			// no reservation found with the given identifier
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>(entity, HttpStatus.OK);
+	}
+	
+	/**
+	 * Delete a desk reservation by the given reservation identifier.
+	 * The user is allowed to delete his own reservation by using the reservation identifier.
+	 * 
+	 * @param reservationIdentifier
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value="/deskreservation/identifier/{reservationIdentifier}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteByIdentifier(@PathVariable String reservationIdentifier, HttpServletRequest request, HttpServletResponse response)
+	{
+		// get the desk reservation by identifier
+		DeskReservation entity = service.findByReservationIdentifier(reservationIdentifier);
+		
+		if (entity == null) {
+			// no reservation found with the given identifier
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		//service.deleteByReservationIdentifier(reservationIdentifier);
+		service.delete(entity);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/deskreservation", method = RequestMethod.POST)
@@ -96,7 +146,7 @@ public class DeskReservationNgrxDataController
 			// we found an existing item with the same desk number
 			if (d != null) {
 				// response with status bad request
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 		}
 		else {
@@ -106,7 +156,7 @@ public class DeskReservationNgrxDataController
 			if ( !isAdminUserAuthenticated() ) {
 				// not logged
 				// response with status forbidden
-				return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 		}
 		
@@ -119,7 +169,7 @@ public class DeskReservationNgrxDataController
 		catch (Exception ex) {
 			logger.error("Validation failed: " + ex.getMessage(), ex);
 			// response with status bad request
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
 		//
@@ -150,7 +200,7 @@ public class DeskReservationNgrxDataController
 		catch (Exception ex) {
 			logger.error(ex.getMessage());
 			// response with status bad request
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
 		entity = service.save(entity);

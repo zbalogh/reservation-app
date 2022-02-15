@@ -13,12 +13,14 @@
 	"homePage" : {
 		"title": "Asztalfoglalás",
 		"button": "Asztalfoglalás",
+		"showReservationButton": "Foglalásaim",
 		"guide" : {
 			"part1" : "Útmutató az online foglaláshoz",
 			"part2" : "Kattints az ASZTALFOGLALÁS gombra.",
 			"part3" : "Az asztal számát keresd meg a listában, és kattints a SZABAD gombra. Amennyiben már foglalt, keress másikat.",
 			"part4" : "A megjelenő oldalon töltsd ki az adataidat, és a feltételek elfogadása után kattints a FOGLALÁS gombra."
-		}
+		},
+		"showReservationGuide": "Kattints a 'Foglalásaim' gombra, ha meg szeretnéd tekinteni a foglalásaidat."
 	},
 
 	"reservationPage" : {
@@ -69,6 +71,19 @@
 		"editReservation": "Foglalás szerkesztése",
 		"editorDescription": "Itt módosíthatod a kiválasztott asztalfoglalás adatait.",
 		"saveButton": "Mentés"
+	},
+
+	"showReservationPage" : {
+		"title": "Foglalás megtekintése",
+		"description": "Itt nézheted meg az asztalfoglalásod adatait.",
+		"reservationIdentifier": "Foglalás azonosító",
+		"desknumber": "Asztal száma",
+		"enterReservationIdentifier": "Kérlek, add meg a foglalási azonosítódat.",
+		"showButton": "Foglalás megtekintése",
+		"reservationNotFound": "Nem található foglalás a megadott azonosítóval.",
+		"cancelReservationFailed": "A foglalás törlése sikertelen.",
+		"cancelReservationSuccess" : "A foglalásodat sikeresen töröltük!",
+		"cancelReservationButton" : "Foglalás törlése"
 	},
 
 	"loginPage" : {
