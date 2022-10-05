@@ -1,34 +1,39 @@
 package com.zbalogh.reservation.apiserver.auth.jwt;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 
 import com.zbalogh.reservation.apiserver.grpc.services.UserGrpcService;
 import com.zbalogh.reservation.apiserver.grpc.stub.UserGRPC.UserResponse;
 
-@Component
-public class JwtRequestFilter extends OncePerRequestFilter
+import reactor.core.publisher.Mono;
+
+// https://www.baeldung.com/spring-webflux-filters
+//
+// https://stackoverflow.com/questions/59289029/how-to-implement-migrate-onceperrequestfilter-using-spring-webflux
+//
+// https://github.com/jwtk/jjwt
+
+//@Component
+@Deprecated
+public class JwtRequestFilter implements WebFilter
 {
 	private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
@@ -37,12 +42,35 @@ public class JwtRequestFilter extends OncePerRequestFilter
 	
 	@Autowired
 	private UserGrpcService userGrpcService;
-
+	
+	
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException
+	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain)
 	{
+		ServerHttpRequest request = exchange.getRequest();
+		ServerHttpResponse response = exchange.getResponse();
+		
+		// execute my filter logic
+		Authentication authentication = doMyFilter(request, response);
+		
+		// continue with other chains
+		if (authentication != null) {
+			//return chain.filter(exchange).subscriberContext(c -> ReactiveSecurityContextHolder.withAuthentication(authentication));
+			return chain.filter(exchange).contextWrite(context -> {
+				return ReactiveSecurityContextHolder.withAuthentication(authentication);
+			});
+		}
+		else {
+			return chain.filter(exchange);
+		}
+	}
+	
+	private Authentication doMyFilter(ServerHttpRequest request, ServerHttpResponse response)
+	{
+		logger.info("JwtRequestFilter(): running JWT authorization filter.");
+		
 		// get the Authorization from the request header
-		final String authorizationHeader = request.getHeader("Authorization");
+		final String authorizationHeader = request.getHeaders().getFirst("Authorization");
 
 		//
 		// if we have Bearer Authorization header then we parse and validate the JWT token
@@ -59,16 +87,12 @@ public class JwtRequestFilter extends OncePerRequestFilter
 				// extract user name from the token
 				username = jwtUtil.extractUsername(jwt);
 
-				// get Authentication object from the security context
-				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
 				logger.info("JwtRequestFilter(): The username is extracted from the JWT token. | username=" + username);
 
 				//
-				// if we have user name from token but no Authentication in the security context
-				// then we add authentication object after validating the token.
+				// if we have user name from token then we add authentication object after validating the token.
 				//
-				if (username != null && authentication == null)
+				if (username != null)
 				{
 					// validate JWT token
 					//if ( jwtUtil.validateToken(jwt) && checkUserExistsOnAuthServer(username) )
@@ -80,12 +104,9 @@ public class JwtRequestFilter extends OncePerRequestFilter
 
 						UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-						usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-						// Set authentication object into the security context
-						SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
 						logger.info("JwtRequestFilter(): JWT token is valid, and authorization is successful. | Authentication: " + usernamePasswordAuthenticationToken);
+						
+						return usernamePasswordAuthenticationToken;
 					}
 				}
 			}
@@ -100,9 +121,9 @@ public class JwtRequestFilter extends OncePerRequestFilter
 				// !!! Spring Security will refuse the request with 401 or 403 status code because no authentication object will be found in the security context. !!! 
 			}
 		}
-
-		// continue with other chains
-		chain.doFilter(request, response);
+		
+		// if we are here, then no authentication, return null
+		return null;
 	}
 
 	/**
@@ -112,7 +133,7 @@ public class JwtRequestFilter extends OncePerRequestFilter
 	 * @return
 	 * @throws UsernameNotFoundException
 	 */
-	private UserDetails createUserDetailsObject(String username) throws UsernameNotFoundException
+	private UserDetails createUserDetailsObject(String username)
 	{
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 

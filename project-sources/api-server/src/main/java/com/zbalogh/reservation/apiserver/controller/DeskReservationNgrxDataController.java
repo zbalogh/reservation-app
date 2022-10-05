@@ -1,21 +1,21 @@
 package com.zbalogh.reservation.apiserver.controller;
 
+import java.security.Principal;
 import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zbalogh.reservation.apiserver.entities.DeskReservation;
+import com.zbalogh.reservation.apiserver.exceptions.DeskReservationExistsException;
 import com.zbalogh.reservation.apiserver.resources.DeskReservationInfo;
 import com.zbalogh.reservation.apiserver.services.DeskReservationService;
 import com.zbalogh.reservation.apiserver.utils.AppConstants;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * REST-API controller for the desk reservations.
@@ -48,30 +52,38 @@ public class DeskReservationNgrxDataController
 	@Autowired
 	private DeskReservationService service;
 	
+	
 	@RequestMapping(value="/deskreservation/getinfo", method = RequestMethod.GET)
-	public @ResponseBody DeskReservationInfo getInfo(HttpServletRequest request, HttpServletResponse response)
+	public @ResponseBody Mono<DeskReservationInfo> getInfo(ServerHttpRequest request, ServerHttpResponse response)
 	{
 		return service.getInfo();
 	}
 
-	@Secured("ROLE_ADMIN")
+	//
+	// https://www.baeldung.com/spring-security-method-security
+	// https://developer.okta.com/blog/2019/06/20/spring-preauthorize
+	//
+	// https://www.baeldung.com/spring-webflux-404
+	//
+	
+	//@Secured("ROLE_ADMIN")
+	//@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/deskreservations", method = RequestMethod.GET)
-	public @ResponseBody List<DeskReservation> getAll(HttpServletRequest request, HttpServletResponse response)
+	public @ResponseBody Flux<DeskReservation> getAll(ServerHttpRequest request, ServerHttpResponse response)
 	{
 		return service.findAll();
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/deskreservation/{id}", method = RequestMethod.GET)
-	public ResponseEntity<DeskReservation> getById(@PathVariable long id, HttpServletRequest request, HttpServletResponse response)
+	public Mono<ResponseEntity<DeskReservation>> getById(@PathVariable long id, ServerHttpRequest request, ServerHttpResponse response)
 	{
-		DeskReservation entity = service.findById(id);
-		
-		if (entity == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		return new ResponseEntity<>(entity, HttpStatus.OK);
+		return service.findById(id)
+				// map the given data into ResponseEntity with status code and body
+				.map(entityMapper)
+				// if no data found, the Mono is empty. So then we switch to this given alternative Mono (ResponseEntity with NOT_FOUND)
+				.switchIfEmpty( Mono.just(ResponseEntity.notFound().build()) );
 	}
 	
 	/**
@@ -86,17 +98,12 @@ public class DeskReservationNgrxDataController
 	 * @return DeskReservation
 	 */
 	@RequestMapping(value = "/deskreservation/identifier/{reservationIdentifier}", method = RequestMethod.GET)
-	public ResponseEntity<DeskReservation> getDeskReservationDetailsByIdentifier(@PathVariable String reservationIdentifier, HttpServletRequest request, HttpServletResponse response)
+	public Mono<ResponseEntity<DeskReservation>> getDeskReservationDetailsByIdentifier(@PathVariable String reservationIdentifier, ServerHttpRequest request, ServerHttpResponse response)
 	{
 		// get the desk reservation by identifier
-		DeskReservation entity = service.findByReservationIdentifier(reservationIdentifier);
-		
-		if (entity == null) {
-			// no reservation found with the given identifier
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		return new ResponseEntity<>(entity, HttpStatus.OK);
+		return service.findByReservationIdentifier(reservationIdentifier)
+				.map(entityMapper)
+				.switchIfEmpty( Mono.just(ResponseEntity.notFound().build()) );
 	}
 	
 	/**
@@ -108,128 +115,144 @@ public class DeskReservationNgrxDataController
 	 * @param response
 	 */
 	@RequestMapping(value="/deskreservation/identifier/{reservationIdentifier}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteByIdentifier(@PathVariable String reservationIdentifier, HttpServletRequest request, HttpServletResponse response)
+	public Mono<ResponseEntity<Void>> deleteByIdentifier(@PathVariable String reservationIdentifier, ServerHttpRequest request, ServerHttpResponse response)
 	{
-		// get the desk reservation by identifier
-		DeskReservation entity = service.findByReservationIdentifier(reservationIdentifier);
+		// find reservation with the given identifier. The service returns Mono with the data
+		Mono<DeskReservation> serviceDataMono = service.findByReservationIdentifier(reservationIdentifier);
 		
-		if (entity == null) {
-			// no reservation found with the given identifier
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		// create Mono with ResponseEntity. In the "map" we delete entry and return ResponseEntity with status code
+		Mono<ResponseEntity<Void>> responseMono = serviceDataMono
+			.flatMap(entity -> {
+				if (entity == null) {
+					return Mono.just(new ResponseEntity<Void>(HttpStatus.NOT_FOUND));
+				}
+				return service.delete(entity).thenReturn(new ResponseEntity<Void>(HttpStatus.OK));
+			})
+			.switchIfEmpty( Mono.just(new ResponseEntity<Void>(HttpStatus.NOT_FOUND)) );
 		
-		//service.deleteByReservationIdentifier(reservationIdentifier);
-		service.delete(entity);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
+		return responseMono;
 	}
 	
+	
 	@RequestMapping(value="/deskreservation", method = RequestMethod.POST)
-	public ResponseEntity<DeskReservation> add(@RequestBody DeskReservation entity, HttpServletRequest request, HttpServletResponse response)
-	{
-		boolean isUpdate = false;
-		
-		//
-		// First of all, we need to check the following things:
-		//
-		// - ADD: We check if we have already another existing reservation for the same desk.
-		//
-		// - UPDATE: If we are updating an existing reservation, we check if the administrator user is logged in. 
-		//
-		if (entity.getId() == null || entity.getId() <= 0) {
-			isUpdate = false;
-			// ID is null or zero, so it's a creation request to insert new item into the database.
-			// let's check whether we have already an item with the given desk number.
-			// If so then we response an error with a status code
-			DeskReservation d = service.findByDeskNumber( entity.getDeskNumber() );
-			
-			// we found an existing item with the same desk number
-			if (d != null) {
-				// response with status bad request
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
-		}
-		else {
-			isUpdate = true;
-			// if ID is not zero then it's an update request
-			// in that case, we have to check if the user is authenticated with administrator role
-			if ( !isAdminUserAuthenticated() ) {
-				// not logged
-				// response with status forbidden
-				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-			}
+	public Mono<ResponseEntity<DeskReservation>> addOrUpdate(@RequestBody DeskReservation entity, 
+														ServerHttpRequest request,
+														ServerHttpResponse response,
+														@AuthenticationPrincipal Principal principal
+	) {
+		if (principal != null) {
+			logger.info("User principal: " + principal + " ["+principal.getClass().getSimpleName()+"]");
 		}
 		
-		//
+		// if ID is not zero then it's an update request
+		boolean isUpdate = entity.getId() != null && entity.getId() > 0;
+		
+		// check if it is Administrator user authenticated
+		boolean isAdminAuth = isAdminUserAuthenticated(principal);
+		
+		// we have to check if the user is authenticated with administrator role
+		// only administrator is allowed to perform an update
+		if ( isUpdate && !isAdminAuth ) {
+			// not logged
+			// response with status forbidden
+			return Mono.just( new ResponseEntity<>(HttpStatus.FORBIDDEN) );
+		}
+		
 		// Validate the data
-		//
 		try {
 			validate(entity, isUpdate);
 		}
 		catch (Exception ex) {
 			logger.error("Validation failed: " + ex.getMessage(), ex);
 			// response with status bad request
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return Mono.just( new ResponseEntity<>(HttpStatus.BAD_REQUEST) );
 		}
 		
-		//
-		// if we add a new reservation then we generate reservation identifier
-		//
-		if (!isUpdate) {
-			// generate reservation identifier and set it to the new reservation entity
-			String reservationId = service.generateReservationIdentifier();
-			entity.setReservationIdentifier(reservationId);
-		}
-		
-		//
-		// All things are done and the entity is ready to be saved
-		// Saving the entity
-		//
-		entity = service.save(entity);
-		
-		return new ResponseEntity<>(entity, HttpStatus.OK);
+		// save data (add or update)
+		return service.addOrUpdate(entity)
+		.map(e -> {
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		})
+		// if "DeskReservationExistsException" occurs then we have to catch it and return BAD REQUEST
+		// all other exceptions will be caught by the default (global) exception handler (AbstractErrorWebExceptionHandler in WebFlux)
+		.onErrorReturn(DeskReservationExistsException.class, new ResponseEntity<>(HttpStatus.BAD_REQUEST));
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/deskreservation/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<DeskReservation> update(@PathVariable long id, @RequestBody DeskReservation entity, HttpServletRequest request, HttpServletResponse response)
-	{
+	public Mono<ResponseEntity<DeskReservation>> update(@PathVariable long id,
+														@RequestBody DeskReservation entity,
+														ServerHttpRequest request,
+														ServerHttpResponse response,
+														@AuthenticationPrincipal Principal principal
+	) {
+		if (principal != null) {
+			logger.info("User principal: " + principal + " ["+principal.getClass().getSimpleName()+"]");
+		}
+		
+		// Validate the data
 		try {
 			validate(entity, true);
 		}
 		catch (Exception ex) {
 			logger.error(ex.getMessage());
 			// response with status bad request
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return Mono.just( new ResponseEntity<>(HttpStatus.BAD_REQUEST) );
 		}
 		
-		entity = service.save(entity);
-		
-		return new ResponseEntity<>(entity, HttpStatus.OK);
+		// save data (update)
+		return service.save(entity)
+		.map(e -> {
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		});
 	}
 	
-	@Secured("ROLE_ADMIN")
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value="/deskreservation/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody void delete(@PathVariable long id, HttpServletRequest request, HttpServletResponse response)
+	public @ResponseBody Mono<ResponseEntity<Void>> delete(@PathVariable long id, ServerHttpRequest request, ServerHttpResponse response)
 	{
-		service.deleteById(id);
+		return service.deleteById(id)
+				.thenReturn(new ResponseEntity<>(HttpStatus.OK));
 	}
 	
 	
+	// ---------------------------------------------------------
 	//
-	// helpers
+	// 							helpers
 	//
+	// ---------------------------------------------------------
 	
-	private boolean isAdminUserAuthenticated()
+	private final Function<DeskReservation, ResponseEntity<DeskReservation>> entityMapper = entity ->
+	{
+		if (entity == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+	};
+	
+	/**
+	 * It checks if the given principal (authentication) has ADMIN role.
+	 * 
+	 * If the HTTP request is already authenticated then Principal (Authentication) object is available via Reactive Security Context.
+	 * 
+	 * @param principal
+	 * @return
+	 */
+	private boolean isAdminUserAuthenticated(Principal principal)
 	{
 		boolean authenticated = false;
 		
+		if (principal == null) {
+			return false;
+		}
+		
 		try {
-			// get the authentication from the security context
-			// it returns NULL if no user authenticated
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			
-			if (authentication != null) {
+			if (principal instanceof Authentication) {
+				// cast Principal to Authentication
+				Authentication authentication = (Authentication) principal;
+				
 				// get the Authorities for the authenticated user
 				Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 				
@@ -244,7 +267,7 @@ public class DeskReservationNgrxDataController
 			}
 		}
 		catch (Exception ex) {
-			logger.error("Exception while reading authentication info from the security context.", ex);
+			logger.error("Exception while reading authorities info from the Authentication (Principal).", ex);
 		}
 		
 		return authenticated;
@@ -252,6 +275,7 @@ public class DeskReservationNgrxDataController
 	
 	/**
 	 * Validate the given entity. If validation fails then it throws Exception.
+	 * 
 	 * @param entity
 	 * @param isUpdate
 	 */

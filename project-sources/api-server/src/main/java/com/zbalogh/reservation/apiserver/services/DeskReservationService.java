@@ -11,11 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
 import com.zbalogh.reservation.apiserver.config.ReservationAppConfig;
 import com.zbalogh.reservation.apiserver.dao.DeskReservationRepository;
 import com.zbalogh.reservation.apiserver.entities.DeskReservation;
+import com.zbalogh.reservation.apiserver.exceptions.DeskReservationExistsException;
 import com.zbalogh.reservation.apiserver.resources.DeskReservationInfo;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Service("deskReservationService")
 @Transactional
@@ -32,39 +36,58 @@ public class DeskReservationService {
 	private DeskReservationRepository repository;
 
 	@Transactional(readOnly=true)
-	public List<DeskReservation> findAll()
+	public Flux<DeskReservation> findAll()
 	{
-		 List<DeskReservation> resultList = Lists.newArrayList(repository.findAll());
-		 
-		 return Collections.unmodifiableList(resultList);
+		Flux<DeskReservation> resultFlux;
+		
+		resultFlux = Mono.fromCallable(() -> {
+			return Collections.unmodifiableList(repository.findAll());
+		})
+		.flatMapMany(list -> Flux.fromIterable(list));
+		
+		resultFlux.subscribeOn(Schedulers.boundedElastic());
+		
+		return resultFlux;
 	}
 	
-	public DeskReservation findById(Long id)
+	public Mono<DeskReservation> findById(Long id)
 	{
-		Optional<DeskReservation> optional = repository.findById(id);
-		
-		return optional.isPresent() ? optional.get() : null;
+		// we can use either 'Mono.defer()' or 'Mono.fromCallable', both provides the same solution.
+		return Mono.defer(() -> {
+			return Mono.justOrEmpty( repository.findById(id) );
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
-	public DeskReservation findByDeskNumber(Integer deskNumber)
+	public Mono<DeskReservation> findByDeskNumber(Integer deskNumber)
 	{
-		Optional<DeskReservation> optional = repository.findByDeskNumber(deskNumber);
-		
-		return optional.isPresent() ? optional.get() : null;
+		return Mono.defer(() -> {
+			return Mono.justOrEmpty( repository.findByDeskNumber(deskNumber) );
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
-	public DeskReservation findByReservationIdentifier(String reservationIdentifier)
+	/*
+	public DeskReservation getReservationByDeskNumber(Integer deskNumber)
 	{
-		Optional<DeskReservation> optional = repository.findByReservationIdentifier(reservationIdentifier);
-		
-		return optional.isPresent() ? optional.get() : null;
+		return repository.findByDeskNumber(deskNumber).orElse(null);
+	}
+	*/
+	
+	public Mono<DeskReservation> findByReservationIdentifier(String reservationIdentifier)
+	{
+		return Mono.defer(() -> {
+			return Mono.justOrEmpty( repository.findByReservationIdentifier(reservationIdentifier) );
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
-	public DeskReservation findByReservationIdentifierAndEmail(String reservationIdentifier, String email)
+	public Mono<DeskReservation> findByReservationIdentifierAndEmail(String reservationIdentifier, String email)
 	{
-		Optional<DeskReservation> optional = repository.findByReservationIdentifierAndEmail(reservationIdentifier, email);
-		
-		return optional.isPresent() ? optional.get() : null;
+		return Mono.defer(() -> {
+			return Mono.justOrEmpty( repository.findByReservationIdentifierAndEmail(reservationIdentifier, email) );
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
 	public int getAlldeskNumber()
@@ -82,19 +105,46 @@ public class DeskReservationService {
 		return result;
 	}
 	
-	public DeskReservationInfo getInfo()
+	public Mono<DeskReservationInfo> getInfo()
 	{
-		final DeskReservationInfo info = new DeskReservationInfo();
+		return Mono.fromCallable(() -> {
+			return doGetDeskReservationInfo();
+		})
+		.subscribeOn(Schedulers.boundedElastic());
+	}
+	
+	/**
+	 * It creates an empty desk reservation info object by initializing with the all desk number.
+	 * 
+	 * @return
+	 */
+	private DeskReservationInfo createDeskReservationInfo()
+	{
+		DeskReservationInfo info = new DeskReservationInfo();
 		
-		// set the list size
+		// get the all the desk number supported by this reservation
 		int listSize = getAlldeskNumber();
 		
 		// initialize the list with the given size
 		info.initList(listSize);
+		
 		logger.info("DeskReservationInfo has been initialized with size=" + listSize);
 		
+		return info;
+	}
+	
+	/**
+	 * Return a fully initialized the desk reservation info object with the actual status of reservations.
+	 * 
+	 * @return
+	 */
+	private DeskReservationInfo doGetDeskReservationInfo()
+	{
+		// create an empty desk reservation info object
+		final DeskReservationInfo info = createDeskReservationInfo();
+		
 		// get all existing reservations
-		final List<DeskReservation> reservations = findAll();
+		final List<DeskReservation> reservations = repository.findAll();
 		
 		// iterate the reservations and set the ID for the given desk
 		for (DeskReservation reservation : reservations) {
@@ -103,37 +153,82 @@ public class DeskReservationService {
 			info.addValue(deskNumber-1, id);
 		}
 		
-		// only a test
-		//info.addValue(5, 1L);
-		
 		return info;
 	}
 	
-	public DeskReservation save(DeskReservation entity)
+	public Mono<DeskReservation> save(DeskReservation entity)
 	{
-		entity = repository.save(entity);
-		
-		return entity;
+		return Mono.fromCallable(() -> {
+			return repository.save(entity);
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
-	public void delete(DeskReservation entity)
+	public Mono<DeskReservation> addOrUpdate(DeskReservation entity)
 	{
-		repository.delete(entity);
+		return Mono.fromCallable(() -> {
+			// if ID is not zero then it's an update request
+			boolean isUpdate = entity.getId() != null && entity.getId() > 0;
+			
+			if (!isUpdate) {
+				// let's check whether we have already an item with the given desk number.
+				// If so then we response an error with a status code.
+				Optional<DeskReservation> d = repository.findByDeskNumber(entity.getDeskNumber());
+				
+				// we found an existing item with the same desk number
+				if (d.isPresent()) {
+					//throw an exception with message
+					throw new DeskReservationExistsException("Desk reservation already exists with the given desk number: " + entity.getDeskNumber());
+				}
+				
+				// if we add a new reservation then we generate reservation identifier
+				// generate reservation identifier and set it to the new reservation entity
+				String reservationId = generateReservationIdentifier();
+				entity.setReservationIdentifier(reservationId);
+			}
+			
+			// All things are done and the entity is ready to be saved
+			return repository.save(entity);
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
-	public void deleteById(Long id)
+	public Mono<Void> delete(DeskReservation entity)
 	{
-		repository.deleteById(id);
+		return Mono.defer(() -> {
+			repository.delete(entity);
+			return Mono.empty().then();
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
-	public void deleteByReservationIdentifier(String reservationIdentifier)
+	public Mono<Void> deleteById(Long id)
 	{
-		repository.deleteByReservationIdentifier(reservationIdentifier);
+		return Mono.defer(() -> {
+			repository.deleteById(id);
+			return Mono.empty().then();
+		})
+		.subscribeOn(Schedulers.boundedElastic());
+	}
+	
+	public Mono<Void> deleteByReservationIdentifier(String reservationIdentifier)
+	{
+		return Mono.defer(() -> {
+			repository.deleteByReservationIdentifier(reservationIdentifier);
+			return Mono.empty().then();
+		})
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
 	public String generateReservationIdentifier()
 	{
 		return RandomStringUtils.randomAlphanumeric(10).toUpperCase();
 	}
+	
+	/*
+	public Scheduler createScheduler() {
+        return Schedulers.fromExecutor(Executors.newFixedThreadPool(10));
+    }
+    */
 	
 }
