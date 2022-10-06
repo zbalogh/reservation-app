@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   reservation-app:
   - apiVersion: v2
+    appVersion: 1.0.9
+    created: "2022-10-06T13:49:38.934937283Z"
+    description: A Helm chart for Reservation App on Kubernetes
+    digest: 06b7ef172ebf46975e4075ade413377cd01cda95e59f13132cc1d675b924b3e3
+    name: reservation-app
+    type: application
+    urls:
+    - https://github.com/zbalogh/reservation-app/releases/download/reservation-app-1.0.9/reservation-app-1.0.9.tgz
+    version: 1.0.9
+  - apiVersion: v2
     appVersion: 1.0.8
     created: "2022-02-15T20:20:18.015717676Z"
     description: A Helm chart for Reservation App on Kubernetes
@@ -51,4 +61,4 @@ entries:
     urls:
     - https://github.com/zbalogh/reservation-app/releases/download/reservation-app-1.0.4/reservation-app-1.0.4.tgz
     version: 1.0.4
-generated: "2022-02-15T20:20:18.015754414Z"
+generated: "2022-10-06T13:49:38.934967183Z"
