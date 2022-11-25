@@ -64,7 +64,7 @@
 		"editorButton": "Edit",
 		"deleteButtonLabel": "Click here, if you want to delete this reservation!",
 		"deleteButton": "Delete",
-		"deleteConfirmation": "Do you want to delete this reservsation?",
+		"deleteConfirmation": "Do you want to delete this reservation?",
 		"deleteYes": "Yes",
 		"deleteNo": "No",
 		"saveSuccess": "The reservation has been successfully saved!",
