@@ -163,8 +163,14 @@ helm install reservation reservation-app/reservation-app --set databasePassword=
 # install with GKE Ingress Controller
 helm install reservation reservation-app/reservation-app --set ingressControllerType=gke
 
+# install with AKS Ingress Controller
+helm install reservation reservation-app/reservation-app --set ingressControllerType=aks
+
 # install with ISTIO Ingress Gateway
 helm install reservation reservation-app/reservation-app --set ingressControllerType=istio
 
 # install with NGINX Ingress Controller (Default)
 helm install reservation reservation-app/reservation-app --set ingressControllerType=nginx
+
+# install without Ingress Controller
+helm install reservation reservation-app/reservation-app --set ingressControllerType=no-ingress
