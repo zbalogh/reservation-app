@@ -1,7 +1,7 @@
 
 # Desk Reservation App
 
-Desk reservation application based on Angular, Java, .NET Core technologies as well as Docker and Kubernetes. 
+Desk reservation application is based on Angular, Java, .NET Core technologies as well as Docker and Kubernetes. 
 
 
 ## The application can be installed via helm:
