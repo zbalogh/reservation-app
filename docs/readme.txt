@@ -48,11 +48,32 @@ docker push zbalogh/reservation-dotnet-auth-server:latest
 # Run with the docker-compose
 #
 
-docker-compose -f docker-compose.yml up -d
+docker-compose -f docker-compose.yml -p reservation-app up -d
  
 docker-compose ps
 
-docker-compose down
+docker-compose -p reservation-app down
+
+
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+#
+# Run with the docker stack on docker swarm
+#
+
+docker stack deploy -c docker-stack.yml reservation-app
+
+docker stack services ls
+
+docker stack services reservation-app
+
+docker stack ps reservation-app
+
+docker stack rm reservation-app
 
 
 
