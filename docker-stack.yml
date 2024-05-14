@@ -17,6 +17,8 @@ services:
 
   webgui-server:
     image: zbalogh/reservation-angular-ui:latest
+    ports:
+      - "8050:8050"
     networks:
       - zbalogh-reservation-network
     depends_on:
@@ -29,6 +31,8 @@ services:
 
   api-server:
     image: zbalogh/reservation-api-server:latest
+    ports:
+      - "8080:8080"
     depends_on:
       - postgres-server
       - spring-api-gateway
@@ -49,6 +53,9 @@ services:
 
   auth-server:
     image: zbalogh/reservation-dotnet-auth-server:latest
+    ports:
+      - "5000:5000"
+      - "5002:5002"
     depends_on:
       - postgres-server
       - spring-api-gateway
@@ -62,6 +69,8 @@ services:
 
   postgres-server:
     image: postgres:9.6
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       #POSTGRES_PASSWORD: 123dbsecret
