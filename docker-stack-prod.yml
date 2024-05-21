@@ -1,0 +1,90 @@
+version: '3.9'
+
+services:
+  spring-api-gateway:
+    image: zbalogh/reservation-spring-api-gateway:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - zbalogh-reservation-network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+  webgui-server:
+    image: zbalogh/reservation-angular-ui:latest
+    networks:
+      - zbalogh-reservation-network
+    depends_on:
+      - spring-api-gateway
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  api-server:
+    image: zbalogh/reservation-api-server:latest
+    depends_on:
+      - postgres-server
+      - spring-api-gateway
+    environment:
+      DB_HOSTNAME: postgres-server
+      DB_PORT: 5432
+      DB_NAME: zbaloghspringdemo
+      DB_USERNAME: postgres
+      DB_PASSWORD: 123dbsecret
+      RESERVATION_AUTH_SERVER_NAME: auth-server
+    networks:
+      - zbalogh-reservation-network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  auth-server:
+    image: zbalogh/reservation-dotnet-auth-server:latest
+    depends_on:
+      - postgres-server
+      - spring-api-gateway
+    networks:
+      - zbalogh-reservation-network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  postgres-server:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      #POSTGRES_PASSWORD: 123dbsecret
+      POSTGRES_PASSWORD_FILE: /run/secrets/psql_password
+      POSTGRES_DB: zbaloghspringdemo
+    secrets:
+      - psql_password
+    volumes:
+      - psql-reservation-data-volume:/var/lib/postgresql/data
+    networks:
+      - zbalogh-reservation-network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  psql-reservation-data-volume:
+
+networks:
+  zbalogh-reservation-network:
+
+secrets:
+  psql_password:
+    file: ./psql_password.txt
