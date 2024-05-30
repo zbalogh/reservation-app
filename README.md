@@ -63,7 +63,7 @@ docker-compose -f docker-compose.yml -p reservation-app up -d
 ```
 
 
-2. un with the docker stack
+2. Run with the docker stack on Docker Swarm
 
 ```
 docker stack deploy -c docker-stack.yml reservation-app
