@@ -1,0 +1,76 @@
+version: '3.9'
+
+services:
+  spring-api-gateway:
+    image: zbalogh/reservation-spring-api-gateway:latest
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - zbalogh-reservation-network
+
+  webgui-server:
+    image: zbalogh/reservation-angular-ui:latest
+    ports:
+      - "8050:8050"
+    restart: always
+    networks:
+      - zbalogh-reservation-network
+    depends_on:
+      - spring-api-gateway
+
+  api-server:
+    build:
+      context: ./project-sources/api-server
+      dockerfile: Dockerfile-dev
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres-server
+      - spring-api-gateway
+    environment:
+      DB_HOSTNAME: postgres-server
+      DB_PORT: 5432
+      DB_NAME: zbaloghspringdemo
+      DB_USERNAME: postgres
+      DB_PASSWORD: 123dbsecret
+      RESERVATION_AUTH_SERVER_NAME: auth-server
+    volumes:
+      - ./project-sources/api-server:/workspace
+    working_dir: /workspace
+    command: ["./mvnw", "spring-boot:run"]
+    networks:
+      - zbalogh-reservation-network
+
+  auth-server:
+    image: zbalogh/reservation-dotnet-auth-server:latest
+    ports:
+      - "5000:5000"
+      - "5002:5002"
+    restart: always
+    depends_on:
+      - postgres-server
+      - spring-api-gateway
+    networks:
+      - zbalogh-reservation-network
+
+  postgres-server:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123dbsecret
+      POSTGRES_DB: zbaloghspringdemo
+    volumes:
+      - psql-reservation-data-volume:/var/lib/postgresql/data
+    networks:
+      - zbalogh-reservation-network
+
+volumes:
+  psql-reservation-data-volume:
+
+networks:
+  zbalogh-reservation-network:

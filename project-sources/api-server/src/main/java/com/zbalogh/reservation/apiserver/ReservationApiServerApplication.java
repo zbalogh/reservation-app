@@ -54,7 +54,7 @@ public class ReservationApiServerApplication implements CommandLineRunner {
 	{
 		logger.info("Starting up Spring Boot application...");
 		ConfigurableApplicationContext context = SpringApplication.run(ReservationApiServerApplication.class, args);
-		logger.info("Spring Boot application running.");
+		logger.info("Spring Boot reservation API server running.");
 		
 		// only for testing the @Bean annotation in the MyCustomBeanConfig class
 		MyCustomBean bean = context.getBean(MyCustomBean.class);

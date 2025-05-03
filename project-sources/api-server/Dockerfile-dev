@@ -1,0 +1,23 @@
+# This dockerfile is used along with the 'docker-compose-dev.yml' to run api-server in development mode.
+# That means all services are running inside the docker but the api-server in dev mode.
+# if you change anything in the source code, the app will be automatically restarted inside the container by spring dev tools.
+
+FROM openjdk:8
+
+# expose port 8080 used by the application
+EXPOSE 8080
+
+# Set the working directory inside the container
+WORKDIR /workspace
+
+# Copy Maven wrapper files into the container
+# Copy Maven wrapper script and the project descriptor (pom.xml)
+COPY .mvn .mvn
+COPY mvnw pom.xml ./
+
+# Download project dependencies to prepare for offline use
+RUN ./mvnw dependency:go-offline -B
+
+# Set the default command to run the Spring Boot application
+# Note: Spring DevTools will automatically restart the application when changes are detected
+CMD ["./mvnw", "spring-boot:run"]
