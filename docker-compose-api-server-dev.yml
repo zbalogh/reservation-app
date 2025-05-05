@@ -44,9 +44,7 @@ services:
       - zbalogh-reservation-network
 
   auth-server:
-    build:
-      context: ./project-sources/dotnet/ReservationAuthServer
-      dockerfile: Dockerfile-dev
+    image: zbalogh/reservation-dotnet-auth-server:latest
     ports:
       - "5000:5000"
       - "5002:5002"
@@ -54,12 +52,6 @@ services:
     depends_on:
       - postgres-server
       - spring-api-gateway
-    environment:
-      - DOTNET_USE_POLLING_FILE_WATCHER=true
-    volumes:
-      - ./project-sources/dotnet/ReservationAuthServer:/workspace
-    working_dir: /workspace
-    command: ["dotnet", "watch", "run", "--urls=http://+:5000"]
     networks:
       - zbalogh-reservation-network
 
