@@ -39,3 +39,6 @@ docker build -t zbalogh/reservation-angular-ui:latest -f Dockerfile .
 
 cd $BASE_DIR/dotnet/ReservationAuthServer
 docker build -t zbalogh/reservation-dotnet-auth-server:latest -f Dockerfile .
+
+cd $BASE_DIR/spring-api-gateway
+docker build -t zbalogh/reservation-spring-api-gateway:latest -f Dockerfile .

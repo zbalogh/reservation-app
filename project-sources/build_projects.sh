@@ -19,6 +19,10 @@ cd $BASE_DIR/api-server
 mvn clean install
 
 
+cd $BASE_DIR/spring-api-gateway
+mvn clean install
+
+
 cd $BASE_DIR/frontend/angular-gui
 rm -rf dist
 npm run bp-dist

@@ -50,6 +50,11 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Ignore ps1 and bat files which sets JAVA_HOME
+# These are developer environment specific files, so should not be added to the repo
+set-java8.bat
+set-java8.ps1
+
 # Other files
 myconfidental.txt
 myconfidental.md
