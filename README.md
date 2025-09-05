@@ -71,3 +71,8 @@ docker stack deploy -c docker-stack.yml reservation-app
 
 
 For more details, go to the **docs** folder: [Click Here](docs/readme.txt)
+
+
+## The application can be installed via AWS CloudFormation template
+
+For more details, go to the **aws-infrastructure** project: [Click Here](project-sources/aws-infrastructure/readme.txt)
